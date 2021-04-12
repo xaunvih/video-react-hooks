@@ -1,7 +1,8 @@
 import React from 'react'
+import Player from './Player'
 
 function App() {
-    return <h3>Hello Dude!</h3>
+    return <Player />
 }
 
 export default App
