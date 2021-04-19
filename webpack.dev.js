@@ -6,7 +6,8 @@ module.exports = merge(webpackCommon, {
     devtool: 'eval-source-map',
     devServer: {
         inline: true,
-        hot: true,
+        hotOnly: true,
+        compress: true,
         open: true,
         writeToDisk: false,
     },
