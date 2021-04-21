@@ -9,6 +9,7 @@ interface IProps {
 
 const Icon = styled.span`
     color: #fff;
+    padding: 10px 15px;
 `
 
 function FullScreen({ isFullScreen, updateFullScreen }: IProps): JSX.Element {
@@ -42,7 +43,11 @@ function FullScreen({ isFullScreen, updateFullScreen }: IProps): JSX.Element {
 
     return (
         <button onClick={onClick}>
-            <Icon className="material-icons">${isFullScreen ? 'fullscreen_exit' : 'fullscreen'} </Icon>
+            {isFullScreen ? (
+                <Icon className="material-icons">fullscreen_exit</Icon>
+            ) : (
+                <Icon className="material-icons">fullscreen</Icon>
+            )}
         </button>
     )
 }
