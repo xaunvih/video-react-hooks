@@ -1,6 +1,6 @@
-import { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 
-const GlobalStyles = createGlobalStyle`
+const GlobalStyles = styled.div`
     button,
     input,
     optgroup,

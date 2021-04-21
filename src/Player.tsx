@@ -6,26 +6,15 @@ import Spinner from './Spinner'
 import FullScreen from './ToolbarFullScreen'
 import BigPlayButton from './BigPlayButton'
 import Timer from './ToolbarTimer'
+import Volume from './ToolbarVolume'
+import PlayButton from './ToolbarPlayButton'
+import ToolbarWrapper, { Toolbar } from './Toolbar'
 
-const Toolbar = styled.div`
-    opacity: 0;
-    transition: opacity 0.3s;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+interface IPLayerWrapper {
+    isFullScreen: boolean
+}
 
-    > div {
-        display: flex;
-        align-items: center;
-    }
-`
-
-const PLayerWrapper = styled.div`
+const PLayerWrapper = styled(GlobalStyles)<IPLayerWrapper>`
     width: 600px;
     height: 337.5px;
     position: relative;
@@ -42,12 +31,23 @@ const PLayerWrapper = styled.div`
     background-color: transparent;
     font-size: 16px;
     font-family: sans-serif;
+    background-color: #000;
 
     &:hover {
         ${Toolbar} {
             opacity: 1;
         }
     }
+
+    ${(props) =>
+        props.isFullScreen &&
+        `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+    `};
 `
 
 const Video = styled.video`
@@ -59,20 +59,17 @@ const Video = styled.video`
     object-fit: contain;
 `
 
-const Icon = styled.span`
-    color: #fff;
-    padding: 10px 15px;
-`
-
 /**
  * Url: https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
  * Video: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video
  */
+
 function Player(): JSX.Element {
     const [isPlay, updatePlay] = React.useState<boolean>(false)
     const [isPlaying, updatePlaying] = React.useState<boolean>(false)
+    const [isEnded, updateEnded] = React.useState<boolean>(false)
+    const [isWaiting, updateWaiting] = React.useState<boolean>(false)
     const [isFullScreen, updateFullScreen] = React.useState<boolean>(false)
-    const [isShowSpinner, updateShowSpinner] = React.useState<boolean>(false)
     const [duration, updateDuration] = React.useState<number>(0)
     const [currentTime, updateCurrentTime] = React.useState<number>(0)
     const videoRef = React.useRef<HTMLVideoElement>(null!)
@@ -98,11 +95,11 @@ function Player(): JSX.Element {
     }
 
     function onWaiting() {
-        updateShowSpinner(true)
+        updateWaiting(true)
     }
 
     function onPlaying() {
-        updateShowSpinner(false)
+        updateWaiting(false)
         updatePlaying(true)
     }
 
@@ -112,6 +109,8 @@ function Player(): JSX.Element {
 
     function onEnd() {
         updatePlay(false)
+        updateEnded(false)
+        updateFullScreen(false)
     }
 
     function onPause() {
@@ -125,6 +124,7 @@ function Player(): JSX.Element {
 
     function onVolumeChange() {
         const volume = videoRef.current.volume || 0
+        console.log(videoRef.current.volume)
     }
 
     function onDurationChange() {
@@ -133,10 +133,13 @@ function Player(): JSX.Element {
 
     return (
         <Provider>
-            <PLayerWrapper onClick={onPlayerClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-                <GlobalStyles />
+            <PLayerWrapper
+                isFullScreen={isFullScreen}
+                onClick={onPlayerClick}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+            >
                 <Video
-                    muted
                     ref={videoRef}
                     onWaiting={onWaiting}
                     onPlaying={onPlaying}
@@ -146,30 +149,26 @@ function Player(): JSX.Element {
                     onTimeUpdate={onTimeUpdate}
                     onVolumeChange={onVolumeChange}
                     onDurationChange={onDurationChange}
+                    poster="https://znews-photo.zadn.vn/w660/Uploaded/wyhktpu/2021_04_20/Tieu_Nu_Nghe_Thuong.jpg"
                 >
                     <source
-                        src="https://znews-mcloud-bf-s2-te-vnso-zn-1.zadn.vn/PvkRW0YePFg/9eead13bfb00105e4911/a8d9f04c4279a927f068/480/836918c7bc8c55d20c9d.mp4?authen=exp=1618917121~acl=/PvkRW0YePFg/*~hmac=0a32757aa463175e37db063745cbaf4e"
+                        src="https://znews-mcloud-bf-s2-te-vnso-pt-3.zadn.vn/nq0wDJSnU8A/6b16e1350df3e6adbfe2/f8fb48fc1034fb6aa225/480/5f0ee9c0618b88d5d19a.mp4?authen=exp=1619160368~acl=/nq0wDJSnU8A/*~hmac=b6d08feb5056f46ea1121c8d206fe015"
                         type="video/mp4"
                     />
                 </Video>
 
                 {(!isPlay || !isPlaying) && <BigPlayButton onClick={onTogglePlayPauseClick} />}
-                {isShowSpinner && <Spinner />}
-
-                <Toolbar>
-                    <div>
-                        <button>
-                            <Icon title="PlayButton" className="material-icons">
-                                {isPlaying ? 'pause' : 'play_arrow'}
-                            </Icon>
-                        </button>
-                        <Timer duration={duration} currentTime={currentTime} />
-                        <button>
-                            <Icon className="material-icons">volume_up</Icon>
-                        </button>
-                    </div>
-                    <FullScreen isFullScreen={isFullScreen} updateFullScreen={updateFullScreen} />
-                </Toolbar>
+                <Spinner isWaiting={isWaiting} />
+                <ToolbarWrapper
+                    left={
+                        <React.Fragment>
+                            <PlayButton isPlaying={isPlaying} />
+                            <Timer duration={duration} currentTime={currentTime} />
+                            <Volume />
+                        </React.Fragment>
+                    }
+                    right={<FullScreen isFullScreen={isFullScreen} updateFullScreen={updateFullScreen} />}
+                />
             </PLayerWrapper>
         </Provider>
     )

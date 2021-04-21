@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import FullscreenAPI from './ToolbarFullScreeenAPI'
 
 interface IProps {
+    isEnded: boolean
     isFullScreen: boolean
     updateFullScreen: (isFullScreen: boolean) => void
 }
@@ -31,6 +32,12 @@ function FullScreen({ isFullScreen, updateFullScreen }: IProps): JSX.Element {
         }
     }, [updateFullScreen])
 
+    React.useEffect(() => {
+        if (FullscreenAPI.isFullscreen) {
+            FullscreenAPI.exit()
+        }
+    }, [isFullScreen])
+
     function onClick() {
         if (!isFullScreen) {
             FullscreenAPI.request()
@@ -53,6 +60,7 @@ function FullScreen({ isFullScreen, updateFullScreen }: IProps): JSX.Element {
 }
 
 FullScreen.defaultProps = {
+    isEnded: false,
     isFullScreen: false,
     updateFullScreen: () => {},
 }

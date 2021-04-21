@@ -141,7 +141,12 @@ const SpinnerCycleRight = styled(SpinnerCycle)`
     animation: ${SpinnerRightKeyFrames} 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 `
 
-function Spinner(): JSX.Element {
+interface ISpinner {
+    isWaiting: boolean
+}
+
+function Spinner({ isWaiting }: ISpinner): JSX.Element {
+    if (!isWaiting) return <React.Fragment />
     return (
         <SpinnerWrapper>
             <SpinnerContainer>
