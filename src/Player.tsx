@@ -3,7 +3,8 @@ import Provider from './Context'
 import styled from 'styled-components'
 import DefaultWrapper from './GlobalStyles'
 import Spinner from './Spinner'
-import FullScreen from './FullScreen'
+import FullScreen from './ToolbarFullScreen'
+import BigPlayButton from './BigPlayButton'
 
 const PLayerWrapper = styled(DefaultWrapper)`
     width: 600px;
@@ -20,19 +21,8 @@ const Video = styled.video`
     object-fit: contain;
 `
 
-const BigPlayButton = styled.button`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-`
-
 const Icon = styled.span`
     color: #fff;
-`
-
-const BigPlayButtonIcon = styled(Icon)`
-    font-size: 80px;
 `
 
 const Toolbar = styled.div`
@@ -46,9 +36,10 @@ const Toolbar = styled.div`
     justify-content: space-around;
 `
 
-const Player = function Player(): JSX.Element {
+function Player(): JSX.Element {
     const [isPlay, updatePlay] = React.useState<boolean>(false)
     const [isPlaying, updatePlaying] = React.useState<boolean>(false)
+    const [isFullScreen, updateFullScreen] = React.useState<boolean>(false)
     const [isShowSpinner, updateShowSpinner] = React.useState<boolean>(false)
     const videoRef = React.useRef<HTMLVideoElement>(null!)
 
@@ -88,12 +79,16 @@ const Player = function Player(): JSX.Element {
 
     function onVolumeChange() {
         const volume = videoRef.current.volume || 0
+
+        console.log('volume: ', volume)
     }
 
     return (
         <Provider>
             <PLayerWrapper onClick={onPlayerWrapperClick}>
                 <Video
+                    muted
+                    // controls
                     ref={videoRef}
                     onWaiting={onWaiting}
                     onPlaying={onPlaying}
@@ -109,24 +104,20 @@ const Player = function Player(): JSX.Element {
                     />
                 </Video>
 
-                {(!isPlay || !isPlaying) && (
-                    <BigPlayButton onClick={onTogglePlayPauseClick}>
-                        <BigPlayButtonIcon className="material-icons"> play_circle_filled </BigPlayButtonIcon>
-                    </BigPlayButton>
-                )}
-
+                {(!isPlay || !isPlaying) && <BigPlayButton onClick={onTogglePlayPauseClick} />}
                 {isShowSpinner && <Spinner />}
 
                 <Toolbar>
-                    <Icon className="material-icons">play_arrow</Icon>
-                    <Icon className="material-icons">pause</Icon>
+                    <Icon title="PlayButton" className="material-icons">
+                        {isPlaying ? 'pause' : 'play_arrow'}
+                    </Icon>
+
                     <Icon className="material-icons">volume_up</Icon>
                     <Icon className="material-icons">volume_off</Icon>
                     <Icon className="material-icons">volume_mute</Icon>
                     <Icon className="material-icons">volume_down</Icon>
-                    <Icon className="material-icons">more_vert</Icon>
 
-                    <FullScreen />
+                    <FullScreen isFullScreen={isFullScreen} updateFullScreen={updateFullScreen} />
                 </Toolbar>
             </PLayerWrapper>
         </Provider>
