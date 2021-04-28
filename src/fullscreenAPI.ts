@@ -68,14 +68,14 @@ class Fullscreen {
         )
     }
 
-    addEventListener(handler: any) {
+    addEventListener(handler: EventListener) {
         document.addEventListener('fullscreenchange', handler)
         document.addEventListener('webkitfullscreenchange', handler)
         document.addEventListener('mozfullscreenchange', handler)
         document.addEventListener('MSFullscreenChange', handler)
     }
 
-    removeEventListener(handler: any) {
+    removeEventListener(handler: EventListener) {
         document.removeEventListener('fullscreenchange', handler)
         document.removeEventListener('webkitfullscreenchange', handler)
         document.removeEventListener('mozfullscreenchange', handler)

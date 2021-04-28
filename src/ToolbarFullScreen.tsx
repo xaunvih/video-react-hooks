@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import FullscreenAPI from './ToolbarFullScreeenAPI'
+import FullscreenAPI from './fullscreenAPI'
 
 interface IProps {
     isEnded: boolean

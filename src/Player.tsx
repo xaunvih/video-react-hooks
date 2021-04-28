@@ -1,6 +1,6 @@
 import React, { MouseEvent } from 'react'
 import Provider from './Context'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import GlobalStyles from './GlobalStyles'
 import Spinner from './Spinner'
 import FullScreen from './ToolbarFullScreen'
@@ -41,13 +41,13 @@ const PLayerWrapper = styled(GlobalStyles)<IPLayerWrapper>`
 
     ${(props) =>
         props.isFullScreen &&
-        `
+        css`
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-    `};
+        `};
 `
 
 const Video = styled.video`
@@ -175,5 +175,3 @@ function Player(): JSX.Element {
 }
 
 export default Player
-
-// volume_off volume_mute volume_down volume_up
