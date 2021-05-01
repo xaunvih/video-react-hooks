@@ -8,7 +8,8 @@ import BigPlayButton from './BigPlayButton'
 import Timer from './ToolbarTimer'
 import Volume from './ToolbarVolume'
 import PlayButton from './ToolbarPlayButton'
-import ToolbarWrapper, { Toolbar } from './Toolbar'
+import ToolbarWrapper from './Toolbar'
+import { debounce, throttle } from './utils'
 
 interface IPLayerWrapper {
     isFullScreen: boolean
@@ -32,12 +33,6 @@ const PLayerWrapper = styled(GlobalStyles)<IPLayerWrapper>`
     font-size: 16px;
     font-family: sans-serif;
     background-color: #000;
-
-    &:hover {
-        ${Toolbar} {
-            opacity: 1;
-        }
-    }
 
     ${(props) =>
         props.isFullScreen &&
@@ -70,20 +65,35 @@ function Player(): JSX.Element {
     const [isEnded, updateEnded] = React.useState<boolean>(false)
     const [isWaiting, updateWaiting] = React.useState<boolean>(false)
     const [isFullScreen, updateFullScreen] = React.useState<boolean>(false)
+    const [volume, updateVolume] = React.useState<number>(0)
     const [duration, updateDuration] = React.useState<number>(0)
     const [currentTime, updateCurrentTime] = React.useState<number>(0)
     const videoRef = React.useRef<HTMLVideoElement>(null!)
+    const [showToolbar, setShowToolbar] = React.useState<boolean>(false)
 
     function onTogglePlayPauseClick(evt: MouseEvent<HTMLButtonElement>) {
         videoRef.current.play()
     }
 
-    function onMouseEnter() {
-        console.log('onMouseEnter')
-    }
+    const hideToolbar = React.useCallback(
+        debounce(function () {
+            setShowToolbar(false)
+        }, 3000),
+        [],
+    )
+
+    const onMouseMove = React.useCallback(
+        throttle(function () {
+            console.log('onMouseMove')
+            setShowToolbar(true)
+            hideToolbar()
+        }),
+        [],
+    )
 
     function onMouseLeave() {
         console.log('onMouseLeave')
+        setShowToolbar(false)
     }
 
     function onPlayerClick(evt: MouseEvent<HTMLDivElement>) {
@@ -136,7 +146,7 @@ function Player(): JSX.Element {
             <PLayerWrapper
                 isFullScreen={isFullScreen}
                 onClick={onPlayerClick}
-                onMouseEnter={onMouseEnter}
+                onMouseMove={onMouseMove}
                 onMouseLeave={onMouseLeave}
             >
                 <Video
@@ -149,17 +159,17 @@ function Player(): JSX.Element {
                     onTimeUpdate={onTimeUpdate}
                     onVolumeChange={onVolumeChange}
                     onDurationChange={onDurationChange}
-                    poster="https://znews-photo.zadn.vn/w660/Uploaded/wyhktpu/2021_04_20/Tieu_Nu_Nghe_Thuong.jpg"
                 >
                     <source
-                        src="https://znews-mcloud-bf-s2-te-vnso-pt-3.zadn.vn/nq0wDJSnU8A/6b16e1350df3e6adbfe2/f8fb48fc1034fb6aa225/480/5f0ee9c0618b88d5d19a.mp4?authen=exp=1619160368~acl=/nq0wDJSnU8A/*~hmac=b6d08feb5056f46ea1121c8d206fe015"
-                        type="video/mp4"
+                        src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm"
+                        type="video/webm"
                     />
                 </Video>
 
                 {(!isPlay || !isPlaying) && <BigPlayButton onClick={onTogglePlayPauseClick} />}
                 <Spinner isWaiting={isWaiting} />
                 <ToolbarWrapper
+                    showToolbar={showToolbar}
                     left={
                         <React.Fragment>
                             <PlayButton isPlaying={isPlaying} />

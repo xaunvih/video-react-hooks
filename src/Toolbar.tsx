@@ -1,7 +1,17 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-const Toolbar = styled.div`
+interface IToolbarWrapper {
+    left: React.ReactNode
+    right: React.ReactNode
+    showToolbar: boolean
+}
+
+interface IToolbar {
+    isShow: boolean
+}
+
+const Toolbar = styled.div<IToolbar>`
     opacity: 0;
     transition: opacity 0.3s;
     position: absolute;
@@ -17,16 +27,21 @@ const Toolbar = styled.div`
         display: flex;
         align-items: center;
     }
+
+    ${(props) =>
+        props.isShow &&
+        css`
+            opacity: 1;
+        `}
 `
 
-interface IToolbarWrapper {
-    left: React.ReactNode
-    right: React.ReactNode
-}
+function ToolbarWrapper({ left, right, showToolbar }: IToolbarWrapper): JSX.Element {
+    React.useEffect(() => {
+        console.log('[ToolbarWrapper] --> re-render')
+    })
 
-function ToolbarWrapper({ left, right }: IToolbarWrapper): JSX.Element {
     return (
-        <Toolbar>
+        <Toolbar isShow={showToolbar}>
             <div>{left}</div>
             <div>{right}</div>
         </Toolbar>
@@ -34,4 +49,3 @@ function ToolbarWrapper({ left, right }: IToolbarWrapper): JSX.Element {
 }
 
 export default ToolbarWrapper
-export { Toolbar }

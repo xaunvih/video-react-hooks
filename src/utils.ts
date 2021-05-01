@@ -25,3 +25,30 @@ export function formatTime(seconds = 0, guide = seconds) {
 
     return h + m + s
 }
+
+export function debounce(func: Function, delay = 300) {
+    let debounceTimer: ReturnType<typeof setTimeout>
+
+    return function () {
+        const context = this
+        const args = arguments
+
+        clearTimeout(debounceTimer)
+        debounceTimer = setTimeout(() => func.apply(context, args), delay)
+    }
+}
+
+export function throttle(func: Function, limit = 16) {
+    let waiting: boolean = false
+    return function () {
+        const args = arguments
+        const context = this
+        if (!waiting) {
+            waiting = true
+            setTimeout(() => {
+                func.apply(context, args)
+                waiting = false
+            }, limit)
+        }
+    }
+}
