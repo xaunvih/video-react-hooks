@@ -21,8 +21,12 @@ module.exports = {
         rules: [
             {
                 test: /\.(ts|tsx)$/,
-                use: 'babel-loader',
+                loader: 'babel-loader',
                 exclude: /(node_modules)/,
+                options: {
+                    cacheCompression: false,
+                    cacheDirectory: true,
+                },
             },
         ],
     },
