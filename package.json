@@ -2,10 +2,31 @@
     "name": "video-react-hooks",
     "version": "1.0.0",
     "description": "A media video player",
-    "main": "index.js",
-    "repository": "git@github.com:xaunvih/video-react-hooks.git",
+    "main": "build/index.js",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:xaunvih/video-react-hooks.git"
+    },
     "author": "vinhmai <vinhmai079@gmail.com>",
     "license": "MIT",
+    "files": [
+        "LICENSE",
+        "README.md",
+        "build",
+        "src"
+    ],
+    "keywords": [
+        "react",
+        "video",
+        "player",
+        "component",
+        "components",
+        "react-component",
+        "react-components",
+        "react component",
+        "react components",
+        "ui"
+    ],
     "scripts": {
         "start": "webpack serve --config webpack.dev.js",
         "build": "webpack --config webpack.prod.js"
@@ -30,6 +51,8 @@
         "eslint-webpack-plugin": "^2.5.4",
         "fork-ts-checker-webpack-plugin": "^6.2.12",
         "html-webpack-plugin": "^5.3.1",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
         "terser-webpack-plugin": "^5.1.1",
         "ts-loader": "^8.1.0",
         "typescript": "^4.2.3",
@@ -39,11 +62,11 @@
         "webpack-merge": "^5.7.3"
     },
     "dependencies": {
-        "react": "^17.0.2",
-        "react-dom": "^17.0.2",
         "styled-components": "^5.2.3"
     },
-    "resolutions": {
+    "peerDependencies": {
+        "react": "^17",
+        "react-dom": "^17",
         "styled-components": "^5"
     }
 }
