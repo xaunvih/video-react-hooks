@@ -83,4 +83,6 @@ class Fullscreen {
     }
 }
 
-export default new Fullscreen()
+const fullscreenAPI = new Fullscreen()
+
+export default fullscreenAPI

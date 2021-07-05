@@ -1,4 +1,4 @@
-export function formatTime(seconds = 0, guide = seconds) {
+export function formatTime(seconds = 0, guide: number = seconds): string {
     let s: any = Math.floor(seconds % 60)
     let m: any = Math.floor((seconds / 60) % 60)
     let h: any = Math.floor(seconds / 3600)
@@ -26,29 +26,10 @@ export function formatTime(seconds = 0, guide = seconds) {
     return h + m + s
 }
 
-export function debounce(func: Function, delay = 300) {
-    let debounceTimer: ReturnType<typeof setTimeout>
-
-    return function () {
-        const context = this
-        const args = arguments
-
-        clearTimeout(debounceTimer)
-        debounceTimer = setTimeout(() => func.apply(context, args), delay)
-    }
-}
-
-export function throttle(func: Function, limit = 16) {
-    let waiting: boolean = false
-    return function () {
-        const args = arguments
-        const context = this
-        if (!waiting) {
-            waiting = true
-            setTimeout(() => {
-                func.apply(context, args)
-                waiting = false
-            }, limit)
-        }
+export function debounce<T extends (...args: any[]) => void>(fn: T, timer = 300) {
+    let timeoutId: number = 0
+    return function (this: any, ...args: any[]) {
+        clearTimeout(timeoutId)
+        timeoutId = window.setTimeout(() => fn.apply(this, args), timer)
     }
 }

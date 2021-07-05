@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import FullscreenAPI from './fullscreenAPI'
+import FullscreenAPI from './utilsFullscreenAPI'
 
 interface IProps {
     isEnded: boolean
@@ -30,7 +30,7 @@ function FullScreen({ isFullScreen, updateFullScreen }: IProps): JSX.Element {
         return () => {
             console.log('FullScreen -- un mount')
         }
-    }, [updateFullScreen])
+    })
 
     React.useEffect(() => {
         if (FullscreenAPI.isFullscreen) {

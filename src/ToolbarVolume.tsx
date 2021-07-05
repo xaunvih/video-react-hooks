@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import LocalStorage from './utilsLocalStorage'
 
 const Icon = styled.span`
     color: #fff;
@@ -29,13 +30,8 @@ function Volume({ volume, updateVolume }: IVolumeProps): JSX.Element {
     const [icon, setIcon] = React.useState<Icon>(() => classifyIcon(volume))
 
     React.useEffect(() => {
-        const savedVolume = window.localStorage.getItem('video-react-volume')
-        if (savedVolume) {
-            const icon = classifyIcon(Number(savedVolume))
-            console.log('icon: ', icon)
-            setIcon(icon)
-        }
-    }, [])
+        setIcon(classifyIcon(Number(volume)))
+    }, [volume])
 
     function classifyIcon(volume: number): Icon {
         if (volume === 0) return 'volume_off'
@@ -46,6 +42,10 @@ function Volume({ volume, updateVolume }: IVolumeProps): JSX.Element {
 
     function onClick() {
         console.log('[Volume] --> Click')
+        const newVolume = volume === 0 ? 1 : 0
+
+        updateVolume(newVolume)
+        LocalStorage.add(LocalStorage.keys.VOLUME, String(newVolume))
     }
 
     return (

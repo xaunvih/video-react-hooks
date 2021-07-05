@@ -1,21 +1,22 @@
 import React, { useReducer, useContext } from 'react'
 
-type PLAY = {
-    type: 'PLAY'
-    payload: any
-}
-
-type PAUSE = {
-    type: 'PAUSE'
-    payload: any
-}
-
 const initialState = {
     play: false,
     pause: false,
 }
 
 type StateType = typeof initialState
+
+type PLAY = {
+    type: 'PLAY'
+    payload: StateType
+}
+
+type PAUSE = {
+    type: 'PAUSE'
+    payload: StateType
+}
+
 type ActionTypes = PLAY | PAUSE
 
 function reducer(state: StateType, action: ActionTypes): StateType {

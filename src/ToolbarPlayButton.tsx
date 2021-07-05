@@ -8,11 +8,12 @@ const Icon = styled.span`
 
 interface IPlayButton {
     isPlaying: boolean
+    onClick: () => void
 }
 
-function PlayButton({ isPlaying }: IPlayButton): JSX.Element {
+function PlayButton({ isPlaying, onClick }: IPlayButton): JSX.Element {
     return (
-        <button>
+        <button onClick={onClick}>
             <Icon title="PlayButton" className="material-icons">
                 {isPlaying ? 'pause' : 'play_arrow'}
             </Icon>
@@ -22,6 +23,7 @@ function PlayButton({ isPlaying }: IPlayButton): JSX.Element {
 
 PlayButton.defaultProps = {
     isPlaying: false,
+    onClick: () => {},
 }
 
 export default PlayButton

@@ -22,6 +22,7 @@ module.exports = {
             {
                 test: /\.(ts|tsx)$/,
                 loader: 'babel-loader',
+                include: path.resolve(__dirname, 'src'),
                 exclude: /(node_modules)/,
                 options: {
                     cacheCompression: false,
