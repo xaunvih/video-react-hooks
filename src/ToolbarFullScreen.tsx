@@ -1,10 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import FullscreenAPI from './utilsFullscreenAPI'
+import { useFullscreen } from './hooks/useFullScreen'
 
 interface IProps {
     isEnded: boolean
-    isFullScreen: boolean
     updateFullScreen: (isFullScreen: boolean) => void
 }
 
@@ -13,56 +12,29 @@ const Icon = styled.span`
     padding: 10px 15px;
 `
 
-function FullScreen({ isFullScreen, updateFullScreen }: IProps): JSX.Element {
-    React.useEffect(() => {
-        function onFullScreenChange() {
-            updateFullScreen(FullscreenAPI.isFullscreen)
-        }
-
-        FullscreenAPI.addEventListener(onFullScreenChange)
-        return () => {
-            FullscreenAPI.removeEventListener(onFullScreenChange)
-        }
-    }, [updateFullScreen])
-
-    React.useEffect(() => {
-        console.log('FullScreen -- render')
-        return () => {
-            console.log('FullScreen -- un mount')
-        }
+function FullScreen(props: IProps): JSX.Element {
+    const { isFullscreen, toggle, exit } = useFullscreen({
+        onChange: (_, isOpen) => props.updateFullScreen(isOpen),
     })
 
-    React.useEffect(() => {
-        if (FullscreenAPI.isFullscreen) {
-            FullscreenAPI.exit()
-        }
-    }, [isFullScreen])
+    const { isEnded } = props
+    const iconName = isFullscreen ? 'fullscreen_exit' : 'fullscreen'
 
     function onClick() {
-        if (!isFullScreen) {
-            FullscreenAPI.request()
-        } else {
-            FullscreenAPI.exit()
-        }
-
-        updateFullScreen(!isFullScreen)
+        toggle()
     }
+
+    useEffect(() => {
+        if (isEnded) {
+            exit()
+        }
+    }, [isEnded, exit])
 
     return (
         <button onClick={onClick}>
-            {isFullScreen ? (
-                <Icon className="material-icons">fullscreen_exit</Icon>
-            ) : (
-                <Icon className="material-icons">fullscreen</Icon>
-            )}
+            <Icon className="material-icons">{iconName}</Icon>
         </button>
     )
-}
-
-FullScreen.defaultProps = {
-    isEnded: false,
-    isFullScreen: false,
-    updateFullScreen: () => {},
 }
 
 export default FullScreen
