@@ -10,6 +10,10 @@ interface IToolbarStyles {
     isShow: boolean
 }
 
+const ToolbarSpace = styled.div`
+    flex-grow: 1;
+`
+
 const Toolbar = styled.div<IToolbarStyles>`
     opacity: 0;
     transition: opacity 0.3s;
@@ -17,10 +21,12 @@ const Toolbar = styled.div<IToolbarStyles>`
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 50px;
+    height: 78px;
     display: flex;
+    padding: 8px;
     align-items: center;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75));
 
     > div {
         display: flex;
@@ -34,12 +40,9 @@ const Toolbar = styled.div<IToolbarStyles>`
         `}
 `
 
-function ToolbarWrapper({ children, showToolbar }: IToolbarWrapper): JSX.Element {
-    React.useEffect(() => {
-        console.log('[ToolbarWrapper] --> re-render')
-    })
-
+function ToolbarWrapper(props: IToolbarWrapper): JSX.Element {
+    const { showToolbar, children } = props
     return <Toolbar isShow={showToolbar}>{children}</Toolbar>
 }
 
-export default ToolbarWrapper
+export { ToolbarSpace, ToolbarWrapper as default }

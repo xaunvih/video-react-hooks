@@ -71,11 +71,11 @@ const SpinnerRightKeyFrames = keyframes`
 
 const SpinnerWrapper = styled.div`
     position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 64px;
+    right: 6%;
+    top: 15%;
+    width: 40px;
     margin-left: -32px;
-    z-index: 18;
+    z-index: 1;
     pointer-events: none;
 `
 
@@ -124,7 +124,7 @@ const SpinnerCycle = styled.div`
     border-style: solid;
     border-color: #ddd #ddd transparent;
     border-radius: 50%;
-    border-width: 6px;
+    border-width: 4px;
 `
 
 const SpinnerCycleLeft = styled(SpinnerCycle)`
@@ -146,9 +146,8 @@ interface ISpinner {
 }
 
 function Spinner({ isWaiting }: ISpinner): JSX.Element {
-    if (!isWaiting) return <React.Fragment />
     return (
-        <SpinnerWrapper>
+        <SpinnerWrapper hidden={!isWaiting}>
             <SpinnerContainer>
                 <SpinnerRotator>
                     <SpinnerLeft>

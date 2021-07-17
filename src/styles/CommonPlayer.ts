@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const StylesCommonPlayer = styled.div`
+const CommonPlayer = styled.div`
     button,
     input,
     optgroup,
@@ -87,4 +87,4 @@ const StylesCommonPlayer = styled.div`
     }
 `
 
-export default StylesCommonPlayer
+export default CommonPlayer
