@@ -1,62 +1,81 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import LocalStorage from './utilsLocalStorage'
+import { LocalStorage } from './utilsLocalStorage'
 
 const Icon = styled.span`
     color: #fff;
-    padding: 10px 15px;
+    padding: 8px;
 `
 
-type Icon = 'volume_off' | 'volume_mute' | 'volume_down' | 'volume_up'
+const ICON = {
+    OFF: 'volume_off',
+    MUTE: 'volume_mute',
+    DOWN: 'volume_down',
+    UP: 'volume_up',
+}
+
+const VolumeWraper = styled.div`
+    width: 150px;
+    display: flex;
+
+    input {
+        flex-grow: 1;
+        height: 2px;
+    }
+`
+
+function classifyIcon(volume: number): string {
+    if (volume === 0) return ICON.OFF
+    if (volume <= 0.4) return ICON.MUTE
+    if (volume <= 0.7) return ICON.DOWN
+    return ICON.UP
+}
 
 interface IVolumeProps {
     volume: number
     updateVolume: any
 }
 
-const Slider = styled.div`
-    height: 3px;
-`
-
-const Bullet = styled.span`
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background-color: #fff;
-    border: 1px solid #fff;
-`
+const DEFAULT_VOLUME = 0.7
+const { VOLUME, VOLUME_MUTE } = LocalStorage.KEYS
 
 function Volume({ volume, updateVolume }: IVolumeProps): JSX.Element {
-    const [icon, setIcon] = React.useState<Icon>(() => classifyIcon(volume))
+    const [icon, setIcon] = useState<string>(() => classifyIcon(volume))
 
-    React.useEffect(() => {
-        setIcon(classifyIcon(Number(volume)))
+    useEffect(() => {
+        const { value } = LocalStorage.get(VOLUME)
+        const volume = value ? Number(value) : DEFAULT_VOLUME
+        updateVolume(volume)
+    }, [])
+
+    useEffect(() => {
+        setIcon(classifyIcon(volume))
+        LocalStorage.add(VOLUME, String(volume))
     }, [volume])
 
-    function classifyIcon(volume: number): Icon {
-        if (volume === 0) return 'volume_off'
-        if (volume <= 0.33) return 'volume_mute'
-        if (volume <= 0.66) return 'volume_down'
-        return 'volume_up'
+    function onClick() {
+        if (volume) {
+            LocalStorage.add(VOLUME_MUTE, String(volume))
+            updateVolume(0)
+            return
+        }
+
+        const { value } = LocalStorage.get(VOLUME_MUTE)
+        const savedVolume = value ? Number(value) : DEFAULT_VOLUME
+        updateVolume(savedVolume)
     }
 
-    function onClick() {
-        console.log('[Volume] --> Click')
-        const newVolume = volume === 0 ? 1 : 0
-
-        updateVolume(newVolume)
-        LocalStorage.add(LocalStorage.keys.VOLUME, String(newVolume))
+    function onChange(evt: React.ChangeEvent<HTMLInputElement>) {
+        updateVolume(Number(evt.target.value) / 100)
     }
 
     return (
-        <div onClick={onClick}>
-            <button>
+        <VolumeWraper>
+            <button onClick={onClick}>
                 <Icon className="material-icons">{icon}</Icon>
             </button>
-            <Slider>
-                <Bullet />
-            </Slider>
-        </div>
+            <input type="range" min={0} max={100} value={volume * 100} onChange={onChange} />
+        </VolumeWraper>
     )
 }
 

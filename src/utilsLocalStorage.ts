@@ -3,8 +3,9 @@ interface IValue {
 }
 
 const LocalStorage = {
-    keys: {
-        VOLUME: 'video-react-volume',
+    KEYS: {
+        VOLUME: 'vd-volume',
+        VOLUME_MUTE: 'vd-volume-mute',
     },
 
     add(key: string, value: any): void {
@@ -36,4 +37,4 @@ const LocalStorage = {
     },
 }
 
-export default LocalStorage
+export { LocalStorage }
