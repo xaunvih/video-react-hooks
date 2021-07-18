@@ -1,17 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useVideoContext } from './Context'
+import Slider from './Slider'
 interface IToolbarSeek {
     onSeekTime: (time: number) => void
 }
 
 const Seekbar = styled.div`
     width: 100%;
-
-    input {
-        width: 100%;
-        height: 3px;
-    }
 `
 
 function ToolbarSeek(props: IToolbarSeek): JSX.Element {
@@ -19,13 +15,14 @@ function ToolbarSeek(props: IToolbarSeek): JSX.Element {
     const { state } = useVideoContext()
     const { duration, currentTime } = state
 
-    function onChange(evt: React.ChangeEvent<HTMLInputElement>) {
-        onSeekTime(Number(evt.target.value))
+    function onChange(value: number) {
+        console.log('seek: ', value)
+        onSeekTime(value)
     }
 
     return (
         <Seekbar>
-            <input type="range" min={0} max={duration} value={currentTime} onChange={onChange} />
+            <Slider min={0} max={duration} value={currentTime} onChange={onChange} />
         </Seekbar>
     )
 }
