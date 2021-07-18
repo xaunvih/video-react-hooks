@@ -1,78 +1,42 @@
-import React, { useReducer, useContext } from 'react'
+import React, { useReducer, useContext, useMemo } from 'react'
+import { StateType, ContextType } from './context/@types'
+import { reducer } from './context/reducer'
 
-const initialState = {
-    play: false,
-    pause: false,
-}
-
-type StateType = typeof initialState
-
-type PLAY = {
-    type: 'PLAY'
-    payload: StateType
-}
-
-type PAUSE = {
-    type: 'PAUSE'
-    payload: StateType
-}
-
-type ActionTypes = PLAY | PAUSE
-
-function reducer(state: StateType, action: ActionTypes): StateType {
-    switch (action.type) {
-        case 'PAUSE':
-            return {
-                ...state,
-                pause: true,
-                play: false,
-            }
-
-        case 'PLAY':
-            return {
-                ...state,
-                pause: false,
-                play: true,
-            }
-
-        default:
-            return state
-    }
-}
-
-type ContextType = {
-    state: StateType
-    dispatch: React.Dispatch<ActionTypes>
+const initialState: StateType = {
+    isPlay: false,
+    isPlaying: false,
+    isEnded: false,
+    isPause: false,
+    isWaiting: false,
+    isFullScreen: false,
+    isSuspensed: false,
+    showToolbar: true,
+    volume: 1,
+    duration: 0,
+    currentTime: 0,
 }
 
 const VideoContext = React.createContext<ContextType>({
-    state: initialState,
-    dispatch: () => null,
+    state: {},
+    dispatch: () => {},
 })
 
 VideoContext.displayName = 'VideoContext'
 
-interface IProps {
-    children: React.ReactNode
-}
-
-function Provider({ children }: IProps): JSX.Element {
+function Provider({ children }): JSX.Element {
     const [state, dispatch] = useReducer(reducer, initialState)
-    return (
-        <VideoContext.Provider
-            value={{
-                state,
-                dispatch,
-            }}
-        >
-            {children}
-        </VideoContext.Provider>
-    )
+    const value = useMemo(() => {
+        return {
+            state,
+            dispatch,
+        }
+    }, [state])
+
+    return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>
 }
 
-function useVideoContext(): ContextType {
+function useVideoContext() {
     return useContext(VideoContext)
 }
 
-export { VideoContext, useVideoContext }
-export default Provider
+export { useVideoContext, Provider as default }
