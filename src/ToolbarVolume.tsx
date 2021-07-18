@@ -15,6 +15,7 @@ const ICON = {
 const VolumeWraper = styled.div`
     width: 150px;
     display: flex;
+    align-items: center;
 
     input {
         flex-grow: 1;
