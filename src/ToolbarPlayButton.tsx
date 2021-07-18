@@ -1,27 +1,21 @@
 import React from 'react'
-import styled from 'styled-components'
-
-const Icon = styled.span`
-    color: #fff;
-    padding: 10px 15px;
-`
+import { useVideoContext } from './Context'
+import Icon from './Icon'
 
 interface IPlayButton {
-    isPlaying: boolean
+    onClick: () => void
 }
 
-function PlayButton({ isPlaying }: IPlayButton): JSX.Element {
+function PlayButton({ onClick }: IPlayButton): JSX.Element {
+    const { state } = useVideoContext()
+    const { isPlaying } = state
+    const icon = isPlaying ? 'pause' : 'play_arrow'
+
     return (
-        <button>
-            <Icon title="PlayButton" className="material-icons">
-                {isPlaying ? 'pause' : 'play_arrow'}
-            </Icon>
+        <button onClick={onClick}>
+            <Icon name={icon}></Icon>
         </button>
     )
-}
-
-PlayButton.defaultProps = {
-    isPlaying: false,
 }
 
 export default PlayButton

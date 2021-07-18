@@ -1,35 +1,34 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useVideoContext } from './Context'
+import Icon from './Icon'
 
-const BigButton = styled.button`
+const Button = styled.button`
     position: absolute;
     top: 50%;
     left: 50%;
+    z-index: 1;
     transform: translate(-50%, -50%);
-`
 
-const Icon = styled.span`
-    color: #fff;
-`
-
-const BigButtonIcon = styled(Icon)`
-    font-size: 80px;
+    span {
+        font-size: 80px;
+    }
 `
 
 interface IBigPlayButton {
     onClick: (evt: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-function BigPlayButton({ onClick }: IBigPlayButton): JSX.Element {
-    return (
-        <BigButton onClick={onClick}>
-            <BigButtonIcon className="material-icons"> play_circle_filled </BigButtonIcon>
-        </BigButton>
-    )
-}
+function BigPlayButton(props: IBigPlayButton): JSX.Element {
+    const { state } = useVideoContext()
+    const { isPlay, isPlaying } = state
+    const isHidden = isPlay || isPlaying
 
-BigPlayButton.defaultProps = {
-    onClick: () => {},
+    return (
+        <Button onClick={props.onClick} hidden={isHidden}>
+            <Icon name="play_circle_filled" />
+        </Button>
+    )
 }
 
 export default BigPlayButton

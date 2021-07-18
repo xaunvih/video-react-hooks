@@ -1,5 +1,6 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
+import { useVideoContext } from './Context'
 
 const SpinnerLinnearKeyFrames = keyframes`
     to {
@@ -73,9 +74,9 @@ const SpinnerWrapper = styled.div`
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 64px;
-    margin-left: -32px;
-    z-index: 18;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    z-index: 1;
     pointer-events: none;
 `
 
@@ -107,13 +108,9 @@ const SpinnerLeft = styled.div`
     right: 49%;
 `
 
-const SpinnerRight = styled.div`
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    overflow: hidden;
+const SpinnerRight = styled(SpinnerLeft)`
     left: 49%;
+    right: unset;
 `
 
 const SpinnerCycle = styled.div`
@@ -124,7 +121,7 @@ const SpinnerCycle = styled.div`
     border-style: solid;
     border-color: #ddd #ddd transparent;
     border-radius: 50%;
-    border-width: 6px;
+    border-width: 4px;
 `
 
 const SpinnerCycleLeft = styled(SpinnerCycle)`
@@ -134,21 +131,18 @@ const SpinnerCycleLeft = styled(SpinnerCycle)`
     animation: ${SpinnerLeftKeyFrames} 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 `
 
-const SpinnerCycleRight = styled(SpinnerCycle)`
+const SpinnerCycleRight = styled(SpinnerCycleLeft)`
     left: -100%;
     right: 0;
-    border-left-color: transparent;
-    animation: ${SpinnerRightKeyFrames} 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+    animation-name: ${SpinnerRightKeyFrames};
 `
 
-interface ISpinner {
-    isWaiting: boolean
-}
+function Spinner(): JSX.Element {
+    const { state } = useVideoContext()
+    const { isWaiting } = state
 
-function Spinner({ isWaiting }: ISpinner): JSX.Element {
-    if (!isWaiting) return <React.Fragment />
     return (
-        <SpinnerWrapper>
+        <SpinnerWrapper hidden={!isWaiting}>
             <SpinnerContainer>
                 <SpinnerRotator>
                     <SpinnerLeft>

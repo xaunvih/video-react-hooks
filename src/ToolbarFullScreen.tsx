@@ -1,68 +1,34 @@
-import React from 'react'
-import styled from 'styled-components'
-import FullscreenAPI from './fullscreenAPI'
+import React, { useEffect } from 'react'
+import { useFullscreen } from './hooks/useFullScreen'
+import { useVideoContext } from './Context'
+import { FULL_SCREEN } from './context/types'
+import Icon from './Icon'
 
-interface IProps {
-    isEnded: boolean
-    isFullScreen: boolean
-    updateFullScreen: (isFullScreen: boolean) => void
-}
+function FullScreen(): JSX.Element {
+    const { state, dispatch } = useVideoContext()
+    const { isFullscreen, toggle, exit } = useFullscreen({
+        onChange: (_, isOpen) =>
+            dispatch({
+                type: FULL_SCREEN,
+                payload: { isFullScreen: isOpen },
+            }),
+    })
 
-const Icon = styled.span`
-    color: #fff;
-    padding: 10px 15px;
-`
+    const { isEnded } = state
+    const iconName = isFullscreen ? 'fullscreen_exit' : 'fullscreen'
+    const onClick = () => toggle()
 
-function FullScreen({ isFullScreen, updateFullScreen }: IProps): JSX.Element {
-    React.useEffect(() => {
-        function onFullScreenChange() {
-            updateFullScreen(FullscreenAPI.isFullscreen)
+    useEffect(() => {
+        if (isEnded) {
+            exit()
         }
-
-        FullscreenAPI.addEventListener(onFullScreenChange)
-        return () => {
-            FullscreenAPI.removeEventListener(onFullScreenChange)
-        }
-    }, [updateFullScreen])
-
-    React.useEffect(() => {
-        console.log('FullScreen -- render')
-        return () => {
-            console.log('FullScreen -- un mount')
-        }
-    }, [updateFullScreen])
-
-    React.useEffect(() => {
-        if (FullscreenAPI.isFullscreen) {
-            FullscreenAPI.exit()
-        }
-    }, [isFullScreen])
-
-    function onClick() {
-        if (!isFullScreen) {
-            FullscreenAPI.request()
-        } else {
-            FullscreenAPI.exit()
-        }
-
-        updateFullScreen(!isFullScreen)
-    }
+    }, [isEnded, exit])
 
     return (
         <button onClick={onClick}>
-            {isFullScreen ? (
-                <Icon className="material-icons">fullscreen_exit</Icon>
-            ) : (
-                <Icon className="material-icons">fullscreen</Icon>
-            )}
+            <Icon name={iconName} />
         </button>
     )
-}
-
-FullScreen.defaultProps = {
-    isEnded: false,
-    isFullScreen: false,
-    updateFullScreen: () => {},
 }
 
 export default FullScreen
