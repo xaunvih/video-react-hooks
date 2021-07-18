@@ -1,10 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-
+import { useVideoContext } from './Context'
 interface IToolbarSeek {
-    currentTime: number
-    duration: number
-    updateSeekTime: (time: number) => void
+    onSeekTime: (time: number) => void
 }
 
 const Seekbar = styled.div`
@@ -17,10 +15,12 @@ const Seekbar = styled.div`
 `
 
 function ToolbarSeek(props: IToolbarSeek): JSX.Element {
-    const { currentTime, duration, updateSeekTime } = props
+    const { onSeekTime } = props
+    const { state } = useVideoContext()
+    const { duration, currentTime } = state
 
     function onChange(evt: React.ChangeEvent<HTMLInputElement>) {
-        updateSeekTime(Number(evt.target.value))
+        onSeekTime(Number(evt.target.value))
     }
 
     return (

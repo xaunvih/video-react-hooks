@@ -1,9 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Player from './Player'
+import Provider from './Context'
 
 function App(): JSX.Element {
-    return <Player />
+    return (
+        <Provider>
+            <Player />
+        </Provider>
+    )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))

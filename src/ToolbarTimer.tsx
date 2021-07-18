@@ -1,10 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-
-interface ITimer {
-    currentTime: number
-    duration: number
-}
+import { useVideoContext } from './Context'
 
 const TimerWrapper = styled.div`
     display: flex;
@@ -24,7 +20,10 @@ const TimerWrapper = styled.div`
     }
 `
 
-function Timer({ currentTime, duration }: ITimer): JSX.Element {
+function Timer(): JSX.Element {
+    const { state } = useVideoContext()
+    const { duration, currentTime } = state
+
     const formatedDuration = React.useMemo(() => {
         return formatTime(duration)
     }, [duration])

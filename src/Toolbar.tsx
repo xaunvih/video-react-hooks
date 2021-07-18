@@ -1,20 +1,18 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
+import { useVideoContext } from './Context'
 
 interface IToolbarWrapper {
     children: React.ReactNode
-    showToolbar: boolean
-}
-
-interface IToolbarStyles {
-    isShow: boolean
 }
 
 const ToolbarSpace = styled.div`
     flex-grow: 1;
 `
 
-const Toolbar = styled.div<IToolbarStyles>`
+const Toolbar = styled.div<{
+    isShow: boolean
+}>`
     opacity: 0;
     transition: opacity 0.3s;
     position: absolute;
@@ -41,8 +39,9 @@ const Toolbar = styled.div<IToolbarStyles>`
 `
 
 function ToolbarWrapper(props: IToolbarWrapper): JSX.Element {
-    const { showToolbar, children } = props
-    return <Toolbar isShow={showToolbar}>{children}</Toolbar>
+    const { state } = useVideoContext()
+    const { showToolbar } = state
+    return <Toolbar isShow={showToolbar}>{props.children}</Toolbar>
 }
 
 export { ToolbarSpace, ToolbarWrapper as default }

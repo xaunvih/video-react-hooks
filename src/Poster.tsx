@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useVideoContext } from './Context'
 
 const PosterWrapper = styled.div`
     position: absolute;
@@ -25,8 +26,12 @@ const DEFAULT_POSTER = 'https://peach.blender.org/wp-content/uploads/title_anoun
 
 function Poster(props: IPoster): JSX.Element {
     const { thumb = DEFAULT_POSTER } = props
+    const { state } = useVideoContext()
+    const { isPlay, isPlaying } = state
+    const isHidden = isPlay || isPlaying
+
     return (
-        <PosterWrapper>
+        <PosterWrapper hidden={isHidden}>
             <img src={thumb} />
         </PosterWrapper>
     )

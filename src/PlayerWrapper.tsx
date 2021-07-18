@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 import styled, { css } from 'styled-components'
 import CommonPlayer from './styles/CommonPlayer'
+import { useVideoContext } from './Context'
+import { SHOW_TOOL_BAR } from './context/types'
 
-interface PlayerStyles {
+const PLayer = styled(CommonPlayer)<{
     isFullScreen: boolean
-}
-
-const PLayer = styled(CommonPlayer)<PlayerStyles>`
+}>`
     width: 600px;
     height: 337.5px;
     position: relative;
@@ -40,33 +40,35 @@ const PLayer = styled(CommonPlayer)<PlayerStyles>`
     }
 `
 
-interface IPlayerWrapper {
-    isPlaying: boolean
-    showToolbar: boolean
-    isEnded: boolean
-    isPause: boolean
-    isFullScreen: boolean
-    setShowToolbar: (showToolbar: boolean) => void
-    children: React.ReactNode
-}
-
-function Player(props: IPlayerWrapper): JSX.Element {
-    const { isPlaying, isFullScreen, showToolbar, isEnded, isPause, setShowToolbar } = props
+function Player({ children }): JSX.Element {
+    const { state, dispatch } = useVideoContext()
+    const { isPlaying, isFullScreen, showToolbar, isEnded, isPause } = state
     const timeoutRef = useRef<number>(0)
 
     const toggleToolbar = useCallback(
         (showToolbar: boolean, timeout: number) => {
             window.clearTimeout(timeoutRef.current)
             timeoutRef.current = window.setTimeout(() => {
-                setShowToolbar(showToolbar)
+                dispatch({
+                    type: SHOW_TOOL_BAR,
+                    payload: {
+                        showToolbar,
+                    },
+                })
             }, timeout)
         },
-        [setShowToolbar],
+        [dispatch],
     )
 
     function onMouseMove() {
         if (isPlaying && !showToolbar) {
-            setShowToolbar(true)
+            dispatch({
+                type: SHOW_TOOL_BAR,
+                payload: {
+                    showToolbar: true,
+                },
+            })
+
             toggleToolbar(false, 4000)
         }
     }
@@ -91,7 +93,7 @@ function Player(props: IPlayerWrapper): JSX.Element {
 
     return (
         <PLayer isFullScreen={isFullScreen} onMouseMoveCapture={onMouseMove} onMouseLeave={onMouseOut}>
-            {props.children}
+            {children}
         </PLayer>
     )
 }

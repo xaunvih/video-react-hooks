@@ -1,28 +1,22 @@
 import React, { useEffect } from 'react'
-import styled from 'styled-components'
 import { useFullscreen } from './hooks/useFullScreen'
+import { useVideoContext } from './Context'
+import { FULL_SCREEN } from './context/types'
+import Icon from './Icon'
 
-interface IProps {
-    isEnded: boolean
-    updateFullScreen: (isFullScreen: boolean) => void
-}
-
-const Icon = styled.span`
-    color: #fff;
-    padding: 10px 15px;
-`
-
-function FullScreen(props: IProps): JSX.Element {
+function FullScreen(): JSX.Element {
+    const { state, dispatch } = useVideoContext()
     const { isFullscreen, toggle, exit } = useFullscreen({
-        onChange: (_, isOpen) => props.updateFullScreen(isOpen),
+        onChange: (_, isOpen) =>
+            dispatch({
+                type: FULL_SCREEN,
+                payload: { isFullScreen: isOpen },
+            }),
     })
 
-    const { isEnded } = props
+    const { isEnded } = state
     const iconName = isFullscreen ? 'fullscreen_exit' : 'fullscreen'
-
-    function onClick() {
-        toggle()
-    }
+    const onClick = () => toggle()
 
     useEffect(() => {
         if (isEnded) {
@@ -32,7 +26,7 @@ function FullScreen(props: IProps): JSX.Element {
 
     return (
         <button onClick={onClick}>
-            <Icon className="material-icons">{iconName}</Icon>
+            <Icon name={iconName} />
         </button>
     )
 }
