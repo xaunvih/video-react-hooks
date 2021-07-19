@@ -13,8 +13,6 @@ import {
 } from './types'
 
 function reducer(state: StateType, action: ActionTypes): StateType {
-    console.log(action)
-
     switch (action.type) {
         case PLAYING:
             return {

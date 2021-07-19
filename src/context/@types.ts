@@ -1,3 +1,5 @@
+import { ReactEventHandler } from 'react'
+
 export type ActionTypes = {
     type: string
     payload?: any
@@ -62,4 +64,51 @@ export interface VideoHTMLAttrs {
     crossOrigin?: string
     disablePictureInPicture?: boolean
     disableRemotePlayback?: boolean
+}
+
+export interface MediaEvents<T> {
+    onAbort?: ReactEventHandler<T>
+    onAbortCapture?: ReactEventHandler<T>
+    onCanPlay?: ReactEventHandler<T>
+    onCanPlayCapture?: ReactEventHandler<T>
+    onCanPlayThrough?: ReactEventHandler<T>
+    onCanPlayThroughCapture?: ReactEventHandler<T>
+    onDurationChange?: ReactEventHandler<T>
+    onDurationChangeCapture?: ReactEventHandler<T>
+    onEmptied?: ReactEventHandler<T>
+    onEmptiedCapture?: ReactEventHandler<T>
+    onEncrypted?: ReactEventHandler<T>
+    onEncryptedCapture?: ReactEventHandler<T>
+    onEnded?: ReactEventHandler<T>
+    onEndedCapture?: ReactEventHandler<T>
+    onLoadedData?: ReactEventHandler<T>
+    onLoadedDataCapture?: ReactEventHandler<T>
+    onLoadedMetadata?: ReactEventHandler<T>
+    onLoadedMetadataCapture?: ReactEventHandler<T>
+    onLoadStart?: ReactEventHandler<T>
+    onLoadStartCapture?: ReactEventHandler<T>
+    onPause?: ReactEventHandler<T>
+    onPauseCapture?: ReactEventHandler<T>
+    onPlay?: ReactEventHandler<T>
+    onPlayCapture?: ReactEventHandler<T>
+    onPlaying?: ReactEventHandler<T>
+    onPlayingCapture?: ReactEventHandler<T>
+    onProgress?: ReactEventHandler<T>
+    onProgressCapture?: ReactEventHandler<T>
+    onRateChange?: ReactEventHandler<T>
+    onRateChangeCapture?: ReactEventHandler<T>
+    onSeeked?: ReactEventHandler<T>
+    onSeekedCapture?: ReactEventHandler<T>
+    onSeeking?: ReactEventHandler<T>
+    onSeekingCapture?: ReactEventHandler<T>
+    onStalled?: ReactEventHandler<T>
+    onStalledCapture?: ReactEventHandler<T>
+    onSuspend?: ReactEventHandler<T>
+    onSuspendCapture?: ReactEventHandler<T>
+    onTimeUpdate?: ReactEventHandler<T>
+    onTimeUpdateCapture?: ReactEventHandler<T>
+    onVolumeChange?: ReactEventHandler<T>
+    onVolumeChangeCapture?: ReactEventHandler<T>
+    onWaiting?: ReactEventHandler<T>
+    onWaitingCapture?: ReactEventHandler<T>
 }
