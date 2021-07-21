@@ -4,6 +4,7 @@ import { LocalStorage } from './utils/localStorage'
 import { useVideoContext } from './Context'
 import { VOLUME_CHANGE } from './context/types'
 import Icon from './Icon'
+import Slider from './Slider'
 
 const ICON = {
     OFF: 'volume_off',
@@ -75,8 +76,8 @@ function Volume(): JSX.Element {
         updateVolume(savedVolume)
     }
 
-    function onChange(evt: React.ChangeEvent<HTMLInputElement>) {
-        updateVolume(Number(evt.target.value) / 100)
+    function onChange(value: number) {
+        updateVolume(value / 100)
     }
 
     return (
@@ -84,7 +85,7 @@ function Volume(): JSX.Element {
             <button onClick={onClick}>
                 <Icon name={icon} />
             </button>
-            <input type="range" min={0} max={100} value={volume * 100} onChange={onChange} />
+            <Slider min={0} max={100} value={volume * 100} onChange={onChange} />
         </VolumeWraper>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 const SliderInner = styled.div`
@@ -61,8 +61,9 @@ const Bullet = styled(BulletCommon)<IMoveStyle>`
 // }))
 
 const SliderWrapper = styled.div`
-    height: 20px;
     cursor: pointer;
+    width: 100%;
+    height: 20px;
 
     &:hover {
         ${SliderInner} {
@@ -81,12 +82,13 @@ interface ISlider {
     max: number
     autoHideBullets?: boolean
     onChange?: (value: number) => void
+    onChangetart?: () => void
+    onChangeEnd?: () => void
 }
 
 function getClient(evt: React.MouseEvent | React.TouchEvent) {
     const isTouchEvent = Boolean((evt as React.TouchEvent).targetTouches)
     const { clientX, clientY } = isTouchEvent ? (evt as React.TouchEvent).targetTouches[0] : (evt as React.MouseEvent)
-
     return {
         isTouchEvent,
         clientX,
@@ -95,16 +97,15 @@ function getClient(evt: React.MouseEvent | React.TouchEvent) {
 }
 
 function Slider(props: ISlider) {
-    const bulletRef = useRef(null!)
     const [dimensions, setDimensions] = useState({
         width: 0,
         height: 0,
+        left: 0,
     })
 
     const [move, updateMove] = useState(0)
     const [state] = useState({
         startPosition: 0,
-        previousPosition: 0,
         dragPosition: 0,
         dragOffset: 0,
         isDragging: false,
@@ -112,9 +113,12 @@ function Slider(props: ISlider) {
 
     const updateDimensions = useCallback((element) => {
         if (!element) return
+
+        const { left } = element.getBoundingClientRect()
         setDimensions({
             width: element.offsetWidth,
             height: element.offsetHeight,
+            left,
         })
     }, [])
 
@@ -122,23 +126,22 @@ function Slider(props: ISlider) {
         const { dragOffset } = state
         const clickThreshol = 5
 
-        if (Math.abs(dragOffset) > clickThreshol) {
-            evt.preventDefault()
-            evt.stopPropagation()
+        if (Math.abs(dragOffset) < clickThreshol) {
+            const { clientX } = getClient(evt)
+            setDragPosition(clientX)
         }
+
+        state.dragOffset = 0
     }
 
     function onDragStart(evt: React.MouseEvent | React.TouchEvent) {
-        const { clientX, isTouchEvent } = getClient(evt)
-        if (!isTouchEvent) {
-            evt.preventDefault()
-            evt.stopPropagation()
-        }
-
+        const { clientX } = getClient(evt)
         state.isDragging = true
         state.startPosition = clientX
-        state.previousPosition = state.dragPosition
-        setDragPosition(state.startPosition)
+
+        if (props.onChangetart) {
+            props.onChangetart()
+        }
     }
 
     function onDraging(evt: React.MouseEvent | React.TouchEvent) {
@@ -150,14 +153,18 @@ function Slider(props: ISlider) {
 
     function onDragEnd() {
         state.isDragging = false
+
+        if (props.onChangeEnd) {
+            props.onChangeEnd()
+        }
     }
 
-    function setDragPosition(x: number) {
-        const { width: sliderWidth } = dimensions
-        const { startPosition, previousPosition, dragOffset } = state
+    function setDragPosition(endPosition: number) {
+        const { width: sliderWidth, left } = dimensions
+        const { startPosition } = state
 
-        state.dragOffset = x - startPosition
-        state.dragPosition = previousPosition + dragOffset
+        state.dragOffset = endPosition - startPosition
+        state.dragPosition = endPosition - left
 
         const { dragPosition } = state
         if (dragPosition >= 0 && dragPosition <= sliderWidth) {
@@ -171,13 +178,21 @@ function Slider(props: ISlider) {
     }
 
     useLayoutEffect(() => {
-        const move = (props.value / (props.max - props.min)) * dimensions.width
-        state.dragPosition = move
+        if (state.isDragging) return
 
-        if (!state.isDragging) {
-            updateMove(move)
-        }
-    }, [props.value, props.min, props.max, dimensions.width, state])
+        const move = (props.value / (props.max - props.min)) * dimensions.width
+        state.dragPosition = move + dimensions.left
+        updateMove(move)
+    }, [
+        props.min,
+        props.max,
+        props.value,
+        dimensions.left,
+        dimensions.width,
+        state,
+        state.isDragging,
+        state.dragPosition,
+    ])
 
     return (
         <SliderWrapper
@@ -188,9 +203,9 @@ function Slider(props: ISlider) {
             onTouchEnd={onDragEnd}
         >
             <SliderInner ref={updateDimensions}>
-                <Desized move={move} />
+                {/* <Desized move={move} /> */}
                 <Progess move={move} />
-                <Bullet ref={bulletRef} move={move} onMouseDown={onDragStart} onTouchStart={onDragStart} />
+                <Bullet move={move} onMouseDown={onDragStart} onTouchStart={onDragStart} />
             </SliderInner>
         </SliderWrapper>
     )
@@ -203,4 +218,4 @@ Slider.defaultProps = {
     autoHideBullets: false,
 }
 
-export default Slider
+export default React.memo(Slider)
