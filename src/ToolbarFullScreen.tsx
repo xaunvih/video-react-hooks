@@ -3,9 +3,15 @@ import { useFullscreen } from './hooks/useFullScreen'
 import { useVideoContext } from './Context'
 import { FULL_SCREEN } from './context/types'
 import Icon from './Icon'
+import { ActionTypes } from './context/@types'
 
-function FullScreen(): JSX.Element {
-    const { state, dispatch } = useVideoContext()
+interface IFullScreenProps {
+    isEnded: boolean
+    dispatch: React.Dispatch<ActionTypes>
+}
+
+const FullScreen = React.memo((props: IFullScreenProps) => {
+    const { isEnded, dispatch } = props
     const { isFullscreen, toggle, exit } = useFullscreen({
         onChange: (_, isOpen) =>
             dispatch({
@@ -14,7 +20,6 @@ function FullScreen(): JSX.Element {
             }),
     })
 
-    const { isEnded } = state
     const iconName = isFullscreen ? 'fullscreen_exit' : 'fullscreen'
     const onClick = () => toggle()
 
@@ -29,6 +34,13 @@ function FullScreen(): JSX.Element {
             <Icon name={iconName} />
         </button>
     )
+})
+
+function FullScreenWrapper() {
+    const { state, dispatch } = useVideoContext()
+    const { isEnded } = state
+
+    return <FullScreen isEnded={isEnded} dispatch={dispatch} />
 }
 
-export default FullScreen
+export default FullScreenWrapper

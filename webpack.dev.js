@@ -4,6 +4,7 @@ const path = require('path')
 const webpackCommon = require('./webpack.common')
 const ESLintPlugin = require('eslint-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = merge(webpackCommon, {
     mode: 'development',
@@ -14,6 +15,9 @@ module.exports = merge(webpackCommon, {
         }),
         new CleanWebpackPlugin(),
         new HotModuleReplacementPlugin(),
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, 'public/index.html'),
+        }),
     ],
     devServer: {
         contentBase: path.join(__dirname, 'src'),

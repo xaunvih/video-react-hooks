@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { useVideoContext } from './Context'
 import Slider from './Slider'
@@ -18,9 +18,12 @@ function ToolbarSeek(props: IToolbarSeek): JSX.Element {
     const { state } = useVideoContext()
     const { duration, currentTime } = state
 
-    function onChange(value: number) {
-        onSeekTime(value)
-    }
+    const onChange = useCallback(
+        (value: number) => {
+            onSeekTime(value)
+        },
+        [onSeekTime],
+    )
 
     return (
         <Seekbar>

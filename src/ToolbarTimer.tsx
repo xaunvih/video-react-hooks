@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useVideoContext } from './Context'
 import { colors, fontSizes, standartSpacingPoint } from './styles'
 
-const TimerWrapper = styled.div`
+const TimerBox = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -21,21 +21,31 @@ const TimerWrapper = styled.div`
     }
 `
 
-function Timer(): JSX.Element {
-    const { state } = useVideoContext()
-    const { duration, currentTime } = state
+interface ITimerProps {
+    duration: number
+    currentTime: number
+}
 
+const Timer = React.memo((props: ITimerProps) => {
+    const { duration, currentTime } = props
     const formatedDuration = React.useMemo(() => {
         return formatTime(duration)
     }, [duration])
 
     return (
-        <TimerWrapper>
+        <TimerBox>
             <span>{formatTime(currentTime)}</span>
             <span>/</span>
             <span>{formatedDuration}</span>
-        </TimerWrapper>
+        </TimerBox>
     )
+})
+
+function TimerWrapper(): JSX.Element {
+    const { state } = useVideoContext()
+    const { duration, currentTime } = state
+
+    return <Timer duration={duration} currentTime={currentTime} />
 }
 
 function formatTime(seconds = 0, guide: number = seconds): string {
@@ -59,4 +69,4 @@ function formatTime(seconds = 0, guide: number = seconds): string {
     return h + m + s
 }
 
-export default Timer
+export default TimerWrapper

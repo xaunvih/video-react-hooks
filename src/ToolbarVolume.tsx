@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { LocalStorage } from './utils/localStorage'
 import { useVideoContext } from './Context'
 import { VOLUME_CHANGE } from './context/types'
+import { ActionTypes } from './context/@types'
 import Icon from './Icon'
 import Slider from './Slider'
 import { standartSpacingPoint } from './styles'
@@ -30,10 +31,14 @@ function classifyIcon(volume: number): string {
 const DEFAULT_VOLUME = 0.7
 const { VOLUME, VOLUME_MUTE } = LocalStorage.KEYS
 
-function Volume(): JSX.Element {
+interface IVolumeProps {
+    volume: number
+    dispatch: React.Dispatch<ActionTypes>
+}
+
+const Volume = React.memo((props: IVolumeProps) => {
     const [icon, setIcon] = useState<string>(() => classifyIcon(volume))
-    const { state, dispatch } = useVideoContext()
-    const { volume } = state
+    const { volume, dispatch } = props
 
     const updateVolume = useCallback(
         (volume: number) => {
@@ -84,6 +89,13 @@ function Volume(): JSX.Element {
             <Slider min={0} max={100} value={volume * 100} onChange={onChange} />
         </VolumeWraper>
     )
+})
+
+function VolumeWrapper(): JSX.Element {
+    const { state, dispatch } = useVideoContext()
+    const { volume } = state
+
+    return <Volume volume={volume} dispatch={dispatch} />
 }
 
-export default Volume
+export default VolumeWrapper
