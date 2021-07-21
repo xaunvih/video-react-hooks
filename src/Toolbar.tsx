@@ -10,9 +10,7 @@ const ToolbarSpace = styled.div`
     flex-grow: 1;
 `
 
-const Toolbar = styled.div<{
-    isShow: boolean
-}>`
+const ToolbarCommon = styled.div`
     opacity: 0;
     transition: opacity 0.3s;
     position: absolute;
@@ -25,12 +23,11 @@ const Toolbar = styled.div<{
     align-items: center;
     flex-wrap: wrap;
     background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75));
+`
 
-    > div {
-        display: flex;
-        align-items: center;
-    }
-
+const Toolbar = styled(ToolbarCommon)<{
+    isShow: boolean
+}>`
     ${(props) =>
         props.isShow &&
         css`
