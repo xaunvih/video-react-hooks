@@ -3,12 +3,15 @@ import styled, { css } from 'styled-components'
 import CommonPlayer from './styles/CommonPlayer'
 import { useVideoContext } from './Context'
 import { SHOW_TOOL_BAR } from './context/types'
+import { standartSpacingPoint, colors, fontSizes } from './styles'
 
 const PLayer = styled(CommonPlayer)<{
     isFullScreen: boolean
 }>`
-    width: 600px;
-    height: 337.5px;
+    // default is 16:9
+    width: ${standartSpacingPoint * 75}px;
+    height: ${standartSpacingPoint * 42}px;
+
     position: relative;
     margin: 0;
     padding: 0;
@@ -16,9 +19,9 @@ const PLayer = styled(CommonPlayer)<{
     line-height: 1.4;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
-    font-size: 16px;
+    font-size: ${fontSizes.large};
     font-family: sans-serif;
-    background-color: #000;
+    background-color: ${colors.black};
 
     ${(props) =>
         props.isFullScreen &&
