@@ -5,6 +5,7 @@ import { useVideoContext } from './Context'
 import { VOLUME_CHANGE } from './context/types'
 import Icon from './Icon'
 import Slider from './Slider'
+import { standartSpacingPoint } from './styles'
 
 const ICON = {
     OFF: 'volume_off',
@@ -14,14 +15,9 @@ const ICON = {
 }
 
 const VolumeWraper = styled.div`
-    width: 150px;
+    width: ${standartSpacingPoint * 19}px;
     display: flex;
     align-items: center;
-
-    input {
-        flex-grow: 1;
-        height: 2px;
-    }
 `
 
 function classifyIcon(volume: number): string {

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useVideoContext } from './Context'
+import { colors, fontSizes, standartSpacingPoint } from './styles'
 
 const TimerWrapper = styled.div`
     display: flex;
@@ -8,14 +9,14 @@ const TimerWrapper = styled.div`
     justify-content: space-between;
     position: relative;
     top: 1px;
-    padding: 8px;
+    padding: ${standartSpacingPoint}px;
 
     span {
-        color: #fff;
-        font-size: 14px;
+        color: ${colors.white};
+        font-size: ${fontSizes.normal};
 
         &:nth-child(2) {
-            padding: 0 4px;
+            padding: 0 ${standartSpacingPoint / 2}px;
         }
     }
 `

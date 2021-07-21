@@ -1,6 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { useVideoContext } from './Context'
+import { standartSpacingPoint } from './styles'
 
 interface IToolbarWrapper {
     children: React.ReactNode
@@ -11,18 +12,18 @@ const ToolbarSpace = styled.div`
 `
 
 const ToolbarCommon = styled.div`
-    opacity: 0;
-    transition: opacity 0.3s;
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 78px;
+    height: ${standartSpacingPoint * 10}px;
+    padding: ${standartSpacingPoint * 2}px;
     display: flex;
-    padding: 8px;
     align-items: center;
     flex-wrap: wrap;
     background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75));
+    opacity: 0;
+    transition: opacity 0.3s;
 `
 
 const Toolbar = styled(ToolbarCommon)<{

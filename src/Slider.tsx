@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useCallback, useLayoutEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
+import { colors } from './styles'
 
 const SliderInner = styled.div`
     position: relative;
@@ -34,7 +35,7 @@ const Desized = styled(Progess)`
 const BulletCommon = styled.span`
     height: 13px;
     width: 13px;
-    background-color: rgb(255, 255, 255);
+    background-color: ${colors.white};
     border-radius: 50%;
     display: inline-block;
     position: absolute;
@@ -42,7 +43,6 @@ const BulletCommon = styled.span`
     left: 0;
     transform: translateY(-50%);
     margin-left: -6px;
-    margin-top: -1px;
 `
 
 const Bullet = styled(BulletCommon)<IMoveStyle>`

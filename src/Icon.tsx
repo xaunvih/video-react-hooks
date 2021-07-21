@@ -8,7 +8,7 @@ interface IIconProps {
 
 const StyledIcon = styled.span`
     color: ${colors.white};
-    padding: ${standartSpacingPoint};
+    padding: ${standartSpacingPoint}px;
 `
 
 function Icon(props: IIconProps): JSX.Element {
