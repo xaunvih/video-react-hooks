@@ -46,6 +46,8 @@ export interface StateType {
     volume: number
     duration: number
     currentTime: number
+    hasStarted: boolean
+    videoEl: HTMLVideoElement | null
 }
 
 export interface VideoHTMLAttrs {

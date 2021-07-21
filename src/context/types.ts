@@ -24,5 +24,8 @@ export const LOADED_DATA = 'LOADED_DATA'
 export const RESIZE = 'RESIZE'
 export const ERROR = 'ERROR'
 export const ACTIVATE_TEXT_TRACK = 'ACTIVATE_TEXT_TRACK'
+
 export const SHOW_TOOL_BAR = 'SHOW_TOOL_BAR'
 export const FULL_SCREEN = 'FULL_SCREEN'
+export const VIDEO_REF = 'VIDEO_REF'
+export const HAS_STARTED = 'HAS_STARTED'

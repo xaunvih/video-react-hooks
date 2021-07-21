@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useVideoContext } from './Context'
 import Slider from './Slider'
+import { standartSpacingPoint } from './styles'
 
 interface IToolbarSeek {
     onSeekTime: (time: number) => void
@@ -9,7 +10,7 @@ interface IToolbarSeek {
 
 const Seekbar = styled.div`
     width: 100%;
-    padding: 0 8px;
+    padding: 0 ${standartSpacingPoint};
 `
 
 function ToolbarSeek(props: IToolbarSeek): JSX.Element {

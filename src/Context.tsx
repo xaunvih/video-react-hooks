@@ -14,6 +14,8 @@ const initialState: StateType = {
     volume: 1,
     duration: 0,
     currentTime: 0,
+    hasStarted: false,
+    videoEl: null,
 }
 
 const VideoContext = React.createContext<ContextType>({

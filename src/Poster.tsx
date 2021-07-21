@@ -15,7 +15,7 @@ const PosterWrapper = styled.div`
     img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
     }
 `
 
@@ -28,11 +28,10 @@ const DEFAULT_POSTER = 'https://peach.blender.org/wp-content/uploads/title_anoun
 function Poster(props: IPoster): JSX.Element {
     const { thumb = DEFAULT_POSTER } = props
     const { state } = useVideoContext()
-    const { isPlay, isPlaying } = state
-    const isHidden = isPlay || isPlaying
+    const { hasStarted } = state
 
     return (
-        <PosterWrapper hidden={isHidden}>
+        <PosterWrapper hidden={hasStarted}>
             <img src={thumb} />
         </PosterWrapper>
     )
