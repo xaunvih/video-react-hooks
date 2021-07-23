@@ -28,9 +28,9 @@ const Progess = styled(ProgessCommon)<IMoveStyle>`
         `};
 `
 
-const Desized = styled(Progess)`
-    background-color: rgba(255, 255, 255, 0.4);
-`
+// const Desized = styled(Progess)`
+//     background-color: rgba(255, 255, 255, 0.4);
+// `
 
 const BulletCommon = styled.span`
     height: 13px;

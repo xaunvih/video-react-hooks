@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { standartSpacingPoint, colors, fontSizes } from '.'
 
 const CommonPlayer = styled.div`
     button,
@@ -85,6 +86,19 @@ const CommonPlayer = styled.div`
         background-color: transparent;
         cursor: pointer;
     }
+
+    width: ${standartSpacingPoint * 75}px;
+    height: ${standartSpacingPoint * 42}px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    line-height: 1.4;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    font-size: ${fontSizes.large};
+    font-family: sans-serif;
+    background-color: ${colors.black};
 `
 
 export default CommonPlayer

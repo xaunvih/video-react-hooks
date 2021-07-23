@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { useVideoContext } from './Context'
 import {
     PLAY,
@@ -12,8 +12,8 @@ import {
     VIDEO_REF,
     HAS_STARTED,
 } from './context/types'
-import PlayerWrapper from './PlayerWrapper'
 import Spinner from './Spinner'
+import { useToggleToolbar } from './hooks/useToggleToolbar'
 import Poster from './Poster'
 import BigPlayButton from './BigPlayButton'
 import ToolbarFullScreen from './ToolbarFullScreen'
@@ -23,11 +23,37 @@ import ToolbarPlayButton from './ToolbarPlayButton'
 import ToolbarPictureinPicture from './ToolbarPictureinPicture'
 import ToolbarSeekBar from './ToolbarSeek'
 import ToolbarWrapper, { ToolbarSpace } from './Toolbar'
+import styled, { css } from 'styled-components'
+import CommonPlayer from './styles/CommonPlayer'
+
+const PlayerWrapper = styled(CommonPlayer)<{
+    isFullScreen: boolean
+}>`
+    ${(props) =>
+        props.isFullScreen &&
+        css`
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        `};
+`
+
+const Video = styled.video`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+`
 
 function Player(): JSX.Element {
-    const videoRef = React.useRef<HTMLVideoElement>(null!)
+    const videoRef = useRef<HTMLVideoElement>(null!)
+    const { onMouseMoveCapture, onMouseOut } = useToggleToolbar()
     const { state, dispatch } = useVideoContext()
-    const { volume, hasStarted } = state
+    const { volume, hasStarted, isFullScreen } = state
 
     function onWaiting() {
         dispatch({ type: WAITING })
@@ -119,12 +145,9 @@ function Player(): JSX.Element {
     }, [dispatch])
 
     return (
-        <PlayerWrapper>
-            <video
-                // src="https://nusid.net/video.mp4"
-                // src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm"
-                // src="https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4"
-                src="https://znews-mcloud-bf-s2-te-vnso-pt-15.zadn.vn/Vopc6ZS0z-4/63794d53c42d2e73773c/75460f6c3c03d65d8f12/480/da3702dd84896dd73498.mp4?authen=exp=1626764622~acl=/Vopc6ZS0z-4/*~hmac=81d7b72215a9bfad312ec08ca64c89dc"
+        <PlayerWrapper isFullScreen={isFullScreen} onMouseMoveCapture={onMouseMoveCapture} onMouseLeave={onMouseOut}>
+            <Video
+                src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm"
                 autoPlay={false}
                 controls={false}
                 loop={false}
