@@ -1,4 +1,3 @@
-const TerserPlugin = require('terser-webpack-plugin')
 const { merge } = require('webpack-merge')
 const webpackCommon = require('./webpack.common')
 
@@ -11,8 +10,5 @@ module.exports = merge(webpackCommon, {
     externals: {
         react: 'react',
         'react-dom': 'ReactDOM',
-    },
-    optimization: {
-        minimizer: [new TerserPlugin()],
     },
 })

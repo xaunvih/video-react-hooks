@@ -19,7 +19,6 @@ module.exports = {
                 include: path.resolve(__dirname, 'src'),
                 exclude: /(node_modules)/,
                 options: {
-                    cacheCompression: false,
                     cacheDirectory: true,
                 },
             },

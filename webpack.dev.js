@@ -1,9 +1,7 @@
 const { merge } = require('webpack-merge')
-const { HotModuleReplacementPlugin } = require('webpack')
 const path = require('path')
 const webpackCommon = require('./webpack.common')
 const ESLintPlugin = require('eslint-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = merge(webpackCommon, {
@@ -13,8 +11,6 @@ module.exports = merge(webpackCommon, {
         new ESLintPlugin({
             extensions: ['.ts', '.tsx', '.js', '.jsx'],
         }),
-        new CleanWebpackPlugin(),
-        new HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'public/index.html'),
         }),
