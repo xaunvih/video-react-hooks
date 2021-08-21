@@ -10,7 +10,6 @@ import {
     DURATION_CHANGE,
     SHOW_TOOL_BAR,
     FULL_SCREEN,
-    VIDEO_REF,
     HAS_STARTED,
 } from './types'
 
@@ -88,13 +87,6 @@ function reducer(state: StateType, action: ActionTypes): StateType {
             return {
                 ...state,
                 isFullScreen,
-            }
-
-        case VIDEO_REF:
-            const { videoEl } = action.payload
-            return {
-                ...state,
-                videoEl,
             }
 
         case HAS_STARTED:

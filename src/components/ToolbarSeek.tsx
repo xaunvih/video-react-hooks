@@ -1,19 +1,20 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
-import { useVideoContext } from './Context'
+import { useVideoContext } from '../context/Context'
 import Slider from './Slider'
-import { standartSpacingPoint } from './styles'
+import { standartSpacingPoint } from '../styles'
 
-interface IToolbarSeek {
+interface IProps {
     onSeekTime: (time: number) => void
 }
 
-const Seekbar = styled.div`
+const S = {} as any
+S.Seekbar = styled.div`
     width: 100%;
     padding: 0 ${standartSpacingPoint};
 `
 
-function ToolbarSeek(props: IToolbarSeek): JSX.Element {
+function ToolbarSeek(props: IProps): React.ReactElement {
     const { onSeekTime } = props
     const { state } = useVideoContext()
     const { duration, currentTime } = state
@@ -26,9 +27,9 @@ function ToolbarSeek(props: IToolbarSeek): JSX.Element {
     )
 
     return (
-        <Seekbar>
+        <S.Seekbar>
             <Slider min={0} max={duration} value={currentTime} onChange={onChange} />
-        </Seekbar>
+        </S.Seekbar>
     )
 }
 

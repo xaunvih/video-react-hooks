@@ -1,6 +1,6 @@
 import React, { useReducer, useContext, useMemo } from 'react'
-import { StateType, ContextType } from './context/@types'
-import { reducer } from './context/reducer'
+import { StateType, ContextType } from './@types'
+import { reducer } from './reducer'
 
 const initialState: StateType = {
     isPlay: false,
@@ -15,7 +15,6 @@ const initialState: StateType = {
     duration: 0,
     currentTime: 0,
     hasStarted: false,
-    videoEl: null,
 }
 
 const VideoContext = React.createContext<ContextType>({
@@ -25,7 +24,7 @@ const VideoContext = React.createContext<ContextType>({
 
 VideoContext.displayName = 'VideoContext'
 
-function Provider({ children }): JSX.Element {
+function Provider({ children }): React.ReactElement {
     const [state, dispatch] = useReducer(reducer, initialState)
     const value = useMemo(() => {
         return {

@@ -1,12 +1,12 @@
 import React from 'react'
-import { useVideoContext } from './Context'
+import { useVideoContext } from '../context/Context'
 import Icon from './Icon'
 
-interface IPlayButton {
+interface IProps {
     onClick: () => void
 }
 
-function PlayButton({ onClick }: IPlayButton): JSX.Element {
+function PlayButton({ onClick }: IProps): React.ReactElement {
     const { state } = useVideoContext()
     const { isPlaying } = state
     const icon = isPlaying ? 'pause' : 'play_arrow'

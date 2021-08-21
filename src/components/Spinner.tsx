@@ -1,12 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useVideoContext } from './Context'
-import {
-    SpinnerLinnearKeyFrames,
-    SpinnerEaseKeyFrames,
-    SpinnerLeftKeyFrames,
-    SpinnerRightKeyFrames,
-} from './styles/animations'
+import { useVideoContext } from '../context/Context'
+import { SpinnerLinnearKeyFrames, SpinnerEaseKeyFrames, SpinnerLeftKeyFrames, SpinnerRightKeyFrames } from '../styles/animations'
 
 const SpinnerWrapper = styled.div`
     position: absolute;
@@ -74,23 +69,25 @@ const SpinnerCycleRight = styled(SpinnerCycleLeft)`
     animation-name: ${SpinnerRightKeyFrames};
 `
 
-function Spinner(): JSX.Element {
+const S = { SpinnerWrapper, SpinnerContainer, SpinnerRotator, SpinnerLeft, SpinnerCycleLeft, SpinnerRight, SpinnerCycleRight }
+
+function Spinner(): React.ReactElement {
     const { state } = useVideoContext()
     const { isWaiting } = state
 
     return (
-        <SpinnerWrapper hidden={!isWaiting}>
-            <SpinnerContainer>
-                <SpinnerRotator>
-                    <SpinnerLeft>
-                        <SpinnerCycleLeft />
-                    </SpinnerLeft>
-                    <SpinnerRight>
-                        <SpinnerCycleRight />
-                    </SpinnerRight>
-                </SpinnerRotator>
-            </SpinnerContainer>
-        </SpinnerWrapper>
+        <S.SpinnerWrapper hidden={!isWaiting}>
+            <S.SpinnerContainer>
+                <S.SpinnerRotator>
+                    <S.SpinnerLeft>
+                        <S.SpinnerCycleLeft />
+                    </S.SpinnerLeft>
+                    <S.SpinnerRight>
+                        <S.SpinnerCycleRight />
+                    </S.SpinnerRight>
+                </S.SpinnerRotator>
+            </S.SpinnerContainer>
+        </S.SpinnerWrapper>
     )
 }
 

@@ -1,19 +1,8 @@
 import React, { useCallback, useEffect, useRef } from 'react'
-import { useVideoContext } from './Context'
-import {
-    PLAY,
-    PLAYING,
-    END,
-    PAUSE,
-    WAITING,
-    TIME_UPDATE,
-    VOLUME_CHANGE,
-    DURATION_CHANGE,
-    VIDEO_REF,
-    HAS_STARTED,
-} from './context/types'
+import { useVideoContext } from '../context/Context'
+import { PLAY, PLAYING, END, PAUSE, WAITING, TIME_UPDATE, VOLUME_CHANGE, DURATION_CHANGE, HAS_STARTED } from '../context/types'
 import Spinner from './Spinner'
-import { useToggleToolbar } from './hooks/useToggleToolbar'
+import { useToggleToolbar } from '../hooks/useToggleToolbar'
 import Poster from './Poster'
 import BigPlayButton from './BigPlayButton'
 import ToolbarFullScreen from './ToolbarFullScreen'
@@ -22,13 +11,13 @@ import ToolbarVolume from './ToolbarVolume'
 import ToolbarPlayButton from './ToolbarPlayButton'
 import ToolbarPictureinPicture from './ToolbarPictureinPicture'
 import ToolbarSeekBar from './ToolbarSeek'
-import ToolbarWrapper, { ToolbarSpace } from './Toolbar'
+import ToolbarWrapper, { S as SToolbar } from './Toolbar'
 import styled, { css } from 'styled-components'
-import CommonPlayer from './styles/CommonPlayer'
+import CommonPlayer from '../styles/CommonPlayer'
 
-const PlayerWrapper = styled(CommonPlayer)<{
-    isFullScreen: boolean
-}>`
+const S = {} as any
+
+S.PlayerWrapper = styled(CommonPlayer)<{ isFullScreen: boolean }>`
     ${(props) =>
         props.isFullScreen &&
         css`
@@ -40,7 +29,7 @@ const PlayerWrapper = styled(CommonPlayer)<{
         `};
 `
 
-const Video = styled.video`
+S.Video = styled.video`
     position: absolute;
     top: 0;
     left: 0;
@@ -49,7 +38,7 @@ const Video = styled.video`
     object-fit: contain;
 `
 
-function Player(): JSX.Element {
+function Player(): React.ReactElement {
     const videoRef = useRef<HTMLVideoElement>(null!)
     const { onMouseMoveCapture, onMouseOut } = useToggleToolbar()
     const { state, dispatch } = useVideoContext()
@@ -130,33 +119,14 @@ function Player(): JSX.Element {
         videoRef.current.volume = volume
     }, [volume])
 
-    useEffect(() => {
-        function dispatchVideoEl(el: HTMLVideoElement | null) {
-            dispatch({
-                type: VIDEO_REF,
-                payload: {
-                    videoEl: el,
-                },
-            })
-        }
-
-        dispatchVideoEl(videoRef.current)
-        return () => dispatchVideoEl(null)
-    }, [dispatch])
-
     return (
-        <PlayerWrapper isFullScreen={isFullScreen} onMouseMoveCapture={onMouseMoveCapture} onMouseLeave={onMouseOut}>
-            <Video
+        <S.PlayerWrapper isFullScreen={isFullScreen} onMouseMoveCapture={onMouseMoveCapture} onMouseLeave={onMouseOut}>
+            <S.Video
                 src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm"
                 autoPlay={false}
-                controls={false}
                 loop={false}
                 muted={false}
                 playsInline={true}
-                height="100%"
-                poster=""
-                width="100%"
-                disablePictureInPicture={false}
                 disableRemotePlayback={false}
                 ref={videoRef}
                 onClick={onVideoClick}
@@ -186,11 +156,11 @@ function Player(): JSX.Element {
                 <ToolbarPlayButton onClick={onTogglePlayClick} />
                 <ToolbarTimer />
                 <ToolbarVolume />
-                <ToolbarSpace />
+                <SToolbar.ToolbarSpace />
                 <ToolbarPictureinPicture onClick={requestPictureInPicture} />
                 <ToolbarFullScreen />
             </ToolbarWrapper>
-        </PlayerWrapper>
+        </S.PlayerWrapper>
     )
 }
 

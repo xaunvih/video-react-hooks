@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { LocalStorage } from './utils/localStorage'
-import { useVideoContext } from './Context'
-import { VOLUME_CHANGE } from './context/types'
-import { ActionTypes } from './context/@types'
+import { LocalStorage } from '../utils/localStorage'
+import { useVideoContext } from '../context/Context'
+import { VOLUME_CHANGE } from '../context/types'
+import { ActionTypes } from '../context/@types'
 import Icon from './Icon'
 import Slider from './Slider'
-import { standartSpacingPoint } from './styles'
+import { standartSpacingPoint } from '../styles'
 
 const ICON = {
     OFF: 'volume_off',
@@ -15,10 +15,15 @@ const ICON = {
     UP: 'volume_up',
 }
 
-const VolumeWraper = styled.div`
+const S = {} as any
+S.VolumeWraper = styled.div`
     width: ${standartSpacingPoint * 19}px;
     display: flex;
     align-items: center;
+
+    > div {
+        flex-grow: 1;
+    }
 `
 
 function classifyIcon(volume: number): string {
@@ -31,12 +36,12 @@ function classifyIcon(volume: number): string {
 const DEFAULT_VOLUME = 0.7
 const { VOLUME, VOLUME_MUTE } = LocalStorage.KEYS
 
-interface IVolumeProps {
+interface IProps {
     volume: number
     dispatch: React.Dispatch<ActionTypes>
 }
 
-const Volume = React.memo((props: IVolumeProps) => {
+const Volume = React.memo((props: IProps) => {
     const [icon, setIcon] = useState<string>(() => classifyIcon(volume))
     const { volume, dispatch } = props
 
@@ -82,16 +87,16 @@ const Volume = React.memo((props: IVolumeProps) => {
     }
 
     return (
-        <VolumeWraper>
+        <S.VolumeWraper>
             <button onClick={onClick}>
                 <Icon name={icon} />
             </button>
             <Slider min={0} max={100} value={volume * 100} onChange={onChange} />
-        </VolumeWraper>
+        </S.VolumeWraper>
     )
 })
 
-function VolumeWrapper(): JSX.Element {
+function VolumeWrapper(): React.ReactElement {
     const { state, dispatch } = useVideoContext()
     const { volume } = state
 

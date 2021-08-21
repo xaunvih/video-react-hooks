@@ -1,17 +1,15 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { useVideoContext } from './Context'
-import { standartSpacingPoint } from './styles'
+import { useVideoContext } from '../context/Context'
+import { standartSpacingPoint } from '../styles'
 
-interface IToolbarWrapper {
-    children: React.ReactNode
-}
+const S = {} as any
 
-const ToolbarSpace = styled.div`
+S.ToolbarSpace = styled.div`
     flex-grow: 1;
 `
 
-const ToolbarCommon = styled.div`
+S.ToolbarCommon = styled.div`
     position: absolute;
     bottom: 0;
     left: 0;
@@ -26,9 +24,7 @@ const ToolbarCommon = styled.div`
     transition: opacity 0.3s;
 `
 
-const Toolbar = styled(ToolbarCommon)<{
-    isShow: boolean
-}>`
+S.Toolbar = styled(S.ToolbarCommon)<{ isShow: boolean }>`
     ${(props) =>
         props.isShow &&
         css`
@@ -36,10 +32,10 @@ const Toolbar = styled(ToolbarCommon)<{
         `}
 `
 
-function ToolbarWrapper(props: IToolbarWrapper): JSX.Element {
+function ToolbarWrapper({ children }): React.ReactElement {
     const { state } = useVideoContext()
     const { showToolbar } = state
-    return <Toolbar isShow={showToolbar}>{props.children}</Toolbar>
+    return <S.Toolbar isShow={showToolbar}>{children}</S.Toolbar>
 }
 
-export { ToolbarSpace, ToolbarWrapper as default }
+export { S, ToolbarWrapper as default }

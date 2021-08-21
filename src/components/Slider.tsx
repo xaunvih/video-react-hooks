@@ -1,6 +1,10 @@
 import React, { useCallback, useLayoutEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
-import { colors } from './styles'
+import { colors } from '../styles'
+
+interface IStyledBulletProps {
+    move: number
+}
 
 const SliderInner = styled.div`
     position: relative;
@@ -20,7 +24,7 @@ const ProgessCommon = styled.div`
     top: 0;
 `
 
-const Progess = styled(ProgessCommon)<IMoveStyle>`
+const Progess = styled(ProgessCommon)<IStyledBulletProps>`
     ${(props) =>
         props.move &&
         css`
@@ -28,9 +32,20 @@ const Progess = styled(ProgessCommon)<IMoveStyle>`
         `};
 `
 
-// const Desized = styled(Progess)`
-//     background-color: rgba(255, 255, 255, 0.4);
-// `
+const Desized = styled(Progess)`
+    background-color: rgba(255, 255, 255, 0.4);
+`
+
+const SliderWrapper = styled.div`
+    cursor: pointer;
+    height: 20px;
+
+    &:hover {
+        ${SliderInner} {
+            height: 5px;
+        }
+    }
+`
 
 const BulletCommon = styled.span`
     height: 13px;
@@ -45,7 +60,14 @@ const BulletCommon = styled.span`
     margin-left: -6px;
 `
 
-const Bullet = styled(BulletCommon)<IMoveStyle>`
+// This way is similar with traditional inline styles
+// const Bullet = styled(BulletCommon).attrs<IStyledBulletProps>((props) => ({
+//     style: {
+//         left: props.move ? `${props.move}px` : 0,
+//     },
+// }))
+
+const Bullet = styled(BulletCommon)<IStyledBulletProps>`
     ${(props) =>
         props.move &&
         css`
@@ -53,30 +75,9 @@ const Bullet = styled(BulletCommon)<IMoveStyle>`
         `};
 `
 
-// This way is similar with traditional inline styles
-// const BulletOther = styled(BulletCommon).attrs<IMoveStyle>((props) => ({
-//     style: {
-//         left: props.move ? `${props.move}px` : 0,
-//     },
-// }))
+const S = { SliderWrapper, SliderInner, Bullet, Progess, Desized }
 
-const SliderWrapper = styled.div`
-    cursor: pointer;
-    width: 100%;
-    height: 20px;
-
-    &:hover {
-        ${SliderInner} {
-            height: 5px;
-        }
-    }
-`
-
-interface IMoveStyle {
-    move: number
-}
-
-interface ISlider {
+interface IProps {
     value: number
     min: number
     max: number
@@ -96,7 +97,7 @@ function getClient(evt: React.MouseEvent | React.TouchEvent) {
     }
 }
 
-function Slider(props: ISlider) {
+function Slider(props: IProps): React.ReactElement {
     const [dimensions, setDimensions] = useState({
         width: 0,
         height: 0,
@@ -104,7 +105,7 @@ function Slider(props: ISlider) {
     })
 
     const [move, updateMove] = useState(0)
-    const [state] = useState({
+    const [skeleton] = useState({
         startPosition: 0,
         dragPosition: 0,
         dragOffset: 0,
@@ -114,16 +115,16 @@ function Slider(props: ISlider) {
     const updateDimensions = useCallback((element) => {
         if (!element) return
 
-        const { left } = element.getBoundingClientRect()
+        const clientRect = element.getBoundingClientRect()
         setDimensions({
             width: element.offsetWidth,
             height: element.offsetHeight,
-            left,
+            left: clientRect.left,
         })
     }, [])
 
     function onClick(evt: React.MouseEvent) {
-        const { dragOffset } = state
+        const { dragOffset } = skeleton
         const clickThreshol = 5
 
         if (Math.abs(dragOffset) < clickThreshol) {
@@ -131,13 +132,13 @@ function Slider(props: ISlider) {
             setDragPosition(clientX)
         }
 
-        state.dragOffset = 0
+        skeleton.dragOffset = 0
     }
 
     function onDragStart(evt: React.MouseEvent | React.TouchEvent) {
         const { clientX } = getClient(evt)
-        state.isDragging = true
-        state.startPosition = clientX
+        skeleton.isDragging = true
+        skeleton.startPosition = clientX
 
         if (props.onChangetart) {
             props.onChangetart()
@@ -145,14 +146,14 @@ function Slider(props: ISlider) {
     }
 
     function onDraging(evt: React.MouseEvent | React.TouchEvent) {
-        if (!state.isDragging) return
+        if (!skeleton.isDragging) return
 
         const { clientX } = getClient(evt)
         setDragPosition(clientX)
     }
 
     function onDragEnd() {
-        state.isDragging = false
+        skeleton.isDragging = false
 
         if (props.onChangeEnd) {
             props.onChangeEnd()
@@ -161,14 +162,14 @@ function Slider(props: ISlider) {
 
     function setDragPosition(endPosition: number) {
         const { width: sliderWidth, left } = dimensions
-        const { startPosition } = state
+        const { startPosition } = skeleton
 
-        state.dragOffset = endPosition - startPosition
-        state.dragPosition = endPosition - left
+        skeleton.dragOffset = endPosition - startPosition
+        skeleton.dragPosition = endPosition - left
 
-        const { dragPosition } = state
+        const { dragPosition } = skeleton
         if (dragPosition >= 0 && dragPosition <= sliderWidth) {
-            updateMove(state.dragPosition)
+            updateMove(skeleton.dragPosition)
 
             if (props.onChange) {
                 const current = (dragPosition / sliderWidth) * (props.max - props.min)
@@ -178,36 +179,21 @@ function Slider(props: ISlider) {
     }
 
     useLayoutEffect(() => {
-        if (state.isDragging) return
+        if (skeleton.isDragging) return
 
         const move = (props.value / (props.max - props.min)) * dimensions.width
-        state.dragPosition = move + dimensions.left
+        skeleton.dragPosition = move + dimensions.left
         updateMove(move)
-    }, [
-        props.min,
-        props.max,
-        props.value,
-        dimensions.left,
-        dimensions.width,
-        state,
-        state.isDragging,
-        state.dragPosition,
-    ])
+    }, [props.min, props.max, props.value, dimensions.left, dimensions.width, skeleton, skeleton.isDragging, skeleton.dragPosition])
 
     return (
-        <SliderWrapper
-            onClick={onClick}
-            onMouseMove={onDraging}
-            onMouseUp={onDragEnd}
-            onTouchMove={onDraging}
-            onTouchEnd={onDragEnd}
-        >
-            <SliderInner ref={updateDimensions}>
-                {/* <Desized move={move} /> */}
-                <Progess move={move} />
-                <Bullet move={move} onMouseDown={onDragStart} onTouchStart={onDragStart} />
-            </SliderInner>
-        </SliderWrapper>
+        <S.SliderWrapper onClick={onClick} onMouseMove={onDraging} onMouseUp={onDragEnd} onTouchMove={onDraging} onTouchEnd={onDragEnd}>
+            <S.SliderInner ref={updateDimensions}>
+                {/* <S.Desized move={move} /> */}
+                <S.Progess move={move} />
+                <S.Bullet move={move} onMouseDown={onDragStart} onTouchStart={onDragStart} />
+            </S.SliderInner>
+        </S.SliderWrapper>
     )
 }
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { useVideoContext } from '../Context'
+import { useVideoContext } from '../context/Context'
 import { SHOW_TOOL_BAR } from '../context/types'
 
 function useToggleToolbar() {

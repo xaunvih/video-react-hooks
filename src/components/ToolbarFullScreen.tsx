@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react'
-import { useFullscreen } from './hooks/useFullScreen'
-import { useVideoContext } from './Context'
-import { FULL_SCREEN } from './context/types'
+import { useFullscreen } from '../hooks/useFullScreen'
+import { useVideoContext } from '../context/Context'
+import { FULL_SCREEN } from '../context/types'
 import Icon from './Icon'
-import { ActionTypes } from './context/@types'
+import { ActionTypes } from '../context/@types'
 
-interface IFullScreenProps {
+interface IProps {
     isEnded: boolean
     dispatch: React.Dispatch<ActionTypes>
 }
 
-const FullScreen = React.memo((props: IFullScreenProps) => {
+const FullScreen = React.memo((props: IProps) => {
     const { isEnded, dispatch } = props
     const { isFullscreen, toggle, exit } = useFullscreen({
         onChange: (_, isOpen) =>
@@ -36,10 +36,9 @@ const FullScreen = React.memo((props: IFullScreenProps) => {
     )
 })
 
-function FullScreenWrapper() {
+function FullScreenWrapper(): React.ReactElement {
     const { state, dispatch } = useVideoContext()
     const { isEnded } = state
-
     return <FullScreen isEnded={isEnded} dispatch={dispatch} />
 }
 

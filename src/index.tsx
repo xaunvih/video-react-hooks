@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Player from './Player'
-import Provider from './Context'
+import Player from './components/Player'
+import Provider from './context/Context'
 
-function App(): JSX.Element {
+function App(): React.ReactElement {
     return (
         <Provider>
             <Player />
