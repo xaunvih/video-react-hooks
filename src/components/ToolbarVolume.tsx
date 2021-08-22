@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { unstable_batchedUpdates } from 'react-dom'
 import styled from 'styled-components'
 import { LocalStorage } from '../utils/localStorage'
-import { useVideoContext } from '../context/Context'
+import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useVideoStateContext } from '../context/Context'
 import { VOLUME_CHANGE } from '../context/types'
 import { ActionTypes } from '../context/@types'
 import Icon from './Icon'
@@ -16,6 +18,7 @@ const ICON = {
 }
 
 const S = {} as any
+
 S.VolumeWraper = styled.div`
     width: ${standartSpacingPoint * 19}px;
     display: flex;
@@ -43,47 +46,50 @@ interface IProps {
 
 const Volume = React.memo((props: IProps) => {
     const [icon, setIcon] = useState<string>(() => classifyIcon(volume))
-    const { volume, dispatch } = props
+    const [storedVolume, setStoredVolume] = useLocalStorage(VOLUME, DEFAULT_VOLUME)
+    const [storedMuteVolume, setStoredMuteVolume] = useLocalStorage(VOLUME_MUTE, DEFAULT_VOLUME)
 
+    const { volume, dispatch } = props
     const updateVolume = useCallback(
         (volume: number) => {
             dispatch({
                 type: VOLUME_CHANGE,
-                payload: { volume },
+                payload: {
+                    volume,
+                },
             })
         },
         [dispatch],
     )
 
+    // initial time
     useEffect(() => {
-        const { value } = LocalStorage.get(VOLUME)
-        const volume = value ? Number(value) : DEFAULT_VOLUME
+        unstable_batchedUpdates(() => {
+            updateVolume(storedVolume)
+            setIcon(classifyIcon(storedVolume))
+        })
+    }, [])
+
+    // onChange
+    function onChange(value: number) {
+        const volume = value / 100
 
         updateVolume(volume)
-    }, [updateVolume])
-
-    useEffect(() => {
+        setStoredVolume(volume)
         setIcon(classifyIcon(volume))
-
-        LocalStorage.add(VOLUME, String(volume))
-    }, [volume])
-
-    function onClick() {
-        if (volume) {
-            LocalStorage.add(VOLUME_MUTE, String(volume))
-
-            updateVolume(0)
-            return
-        }
-
-        const { value } = LocalStorage.get(VOLUME_MUTE)
-        const savedVolume = value ? Number(value) : DEFAULT_VOLUME
-
-        updateVolume(savedVolume)
     }
 
-    function onChange(value: number) {
-        updateVolume(value / 100)
+    // Click icon volume
+    function onClick() {
+        let volumeTemp = storedMuteVolume ? storedMuteVolume : DEFAULT_VOLUME
+        if (volume) {
+            volumeTemp = 0
+            setStoredMuteVolume(volume)
+        }
+
+        updateVolume(volumeTemp)
+        setIcon(classifyIcon(volumeTemp))
+        setStoredVolume(volumeTemp)
     }
 
     return (
@@ -96,11 +102,11 @@ const Volume = React.memo((props: IProps) => {
     )
 })
 
-function VolumeWrapper(): React.ReactElement {
-    const { state, dispatch } = useVideoContext()
+function VolumeWithContext(): React.ReactElement {
+    const { state, dispatch } = useVideoStateContext()
     const { volume } = state
 
     return <Volume volume={volume} dispatch={dispatch} />
 }
 
-export default VolumeWrapper
+export default VolumeWithContext
