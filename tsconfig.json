@@ -15,8 +15,12 @@
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "react",
-        "noImplicitAny": false
+        "noImplicitAny": false,
+        "baseUrl": ".",
+        "paths": {
+            "video-react-hooks/*": ["src/*"]
+        }
     },
-    "include": ["src"],
+    "include": ["src", "public/index.tsx"],
     "exclude": ["node_modules", "build"]
 }

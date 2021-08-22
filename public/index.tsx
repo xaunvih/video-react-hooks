@@ -1,13 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Player from './components/Player'
-import Provider from './context/Context'
+import Player from 'video-react-hooks/components/Player'
+import PlayerWrapper from 'video-react-hooks/components/PlayerWrapper'
 
 function App(): React.ReactElement {
     return (
-        <Provider>
+        <PlayerWrapper>
             <Player />
-        </Provider>
+        </PlayerWrapper>
     )
 }
 
