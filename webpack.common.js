@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 
 module.exports = {
     entry: path.join(__dirname, 'public/index.tsx'),
@@ -23,6 +24,10 @@ module.exports = {
                 options: {
                     cacheDirectory: true,
                 },
+            },
+            {
+                test: /\.svg$/,
+                use: ['@svgr/webpack'],
             },
         ],
     },

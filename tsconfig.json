@@ -21,6 +21,6 @@
             "video-react-hooks/*": ["src/*"]
         }
     },
-    "include": ["src", "public/index.tsx"],
+    "include": ["src", "public/index.tsx", "src/custom.d.ts"],
     "exclude": ["node_modules", "build"]
 }
