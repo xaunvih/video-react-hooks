@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react'
-import { useVideoContext } from '../context/Context'
+import { useVideoStateContext } from '../context/Context'
 import { PLAY, PLAYING, END, PAUSE, WAITING, TIME_UPDATE, VOLUME_CHANGE, DURATION_CHANGE, HAS_STARTED } from '../context/types'
 import Spinner from './Spinner'
 import { useToggleToolbar } from '../hooks/useToggleToolbar'
@@ -41,7 +41,7 @@ S.Video = styled.video`
 function Player(): React.ReactElement {
     const videoRef = useRef<HTMLVideoElement>(null!)
     const { onMouseMoveCapture, onMouseOut } = useToggleToolbar()
-    const { state, dispatch } = useVideoContext()
+    const { state, dispatch } = useVideoStateContext()
     const { volume, hasStarted, isFullScreen } = state
 
     function onWaiting() {

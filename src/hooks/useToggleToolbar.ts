@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { useVideoContext } from '../context/Context'
+import { useVideoStateContext } from '../context/Context'
 import { SHOW_TOOL_BAR } from '../context/types'
 
 function useToggleToolbar() {
-    const { state, dispatch } = useVideoContext()
+    const { state, dispatch } = useVideoStateContext()
     const { isPlaying, showToolbar, isEnded, isPause } = state
     const timeoutRef = useRef<number>(0)
 

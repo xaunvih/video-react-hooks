@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
-import { useVideoContext } from '../context/Context'
+import { useVideoStateContext } from '../context/Context'
 import Slider from './Slider'
 import { standartSpacingPoint } from '../styles'
 
@@ -16,7 +16,7 @@ S.Seekbar = styled.div`
 
 function ToolbarSeek(props: IProps): React.ReactElement {
     const { onSeekTime } = props
-    const { state } = useVideoContext()
+    const { state } = useVideoStateContext()
     const { duration, currentTime } = state
 
     const onChange = useCallback(

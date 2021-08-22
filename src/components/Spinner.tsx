@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useVideoContext } from '../context/Context'
+import { useVideoStateContext } from '../context/Context'
 import { SpinnerLinnearKeyFrames, SpinnerEaseKeyFrames, SpinnerLeftKeyFrames, SpinnerRightKeyFrames } from '../styles/animations'
 
 const SpinnerWrapper = styled.div`
@@ -72,7 +72,7 @@ const SpinnerCycleRight = styled(SpinnerCycleLeft)`
 const S = { SpinnerWrapper, SpinnerContainer, SpinnerRotator, SpinnerLeft, SpinnerCycleLeft, SpinnerRight, SpinnerCycleRight }
 
 function Spinner(): React.ReactElement {
-    const { state } = useVideoContext()
+    const { state } = useVideoStateContext()
     const { isWaiting } = state
 
     return (

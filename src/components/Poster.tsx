@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useVideoContext } from '../context/Context'
+import { useVideoStateContext } from '../context/Context'
 import { colors } from '../styles'
 
 const S = {
@@ -30,7 +30,7 @@ const DEFAULT_POSTER = 'https://peach.blender.org/wp-content/uploads/title_anoun
 
 function Poster(props: IProps): React.ReactElement {
     const { thumb = DEFAULT_POSTER } = props
-    const { state } = useVideoContext()
+    const { state } = useVideoStateContext()
     const { hasStarted } = state
 
     return (

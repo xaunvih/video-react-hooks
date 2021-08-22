@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { useVideoContext } from '../context/Context'
+import { useVideoStateContext } from '../context/Context'
 import { standartSpacingPoint } from '../styles'
 
 const S = {} as any
@@ -33,7 +33,7 @@ S.Toolbar = styled(S.ToolbarCommon)<{ isShow: boolean }>`
 `
 
 function ToolbarWrapper({ children }): React.ReactElement {
-    const { state } = useVideoContext()
+    const { state } = useVideoStateContext()
     const { showToolbar } = state
     return <S.Toolbar isShow={showToolbar}>{children}</S.Toolbar>
 }

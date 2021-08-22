@@ -1,4 +1,4 @@
-import React, { useReducer, useContext, useMemo } from 'react'
+import React, { useReducer, useContext, useMemo, useRef } from 'react'
 import { StateType, ContextType } from './@types'
 import { reducer } from './reducer'
 
@@ -17,14 +17,16 @@ const initialState: StateType = {
     hasStarted: false,
 }
 
-const VideoContext = React.createContext<ContextType>({
+const VideoRefContext = React.createContext(null)
+const VideoStateContext = React.createContext<ContextType>({
     state: {},
     dispatch: () => {},
 })
 
-VideoContext.displayName = 'VideoContext'
+VideoStateContext.displayName = 'VideoStateContext'
+VideoRefContext.displayName = 'VideoRefContext'
 
-function Provider({ children }): React.ReactElement {
+function VideoStateProvider({ children }): React.ReactElement {
     const [state, dispatch] = useReducer(reducer, initialState)
     const value = useMemo(() => {
         return {
@@ -33,11 +35,20 @@ function Provider({ children }): React.ReactElement {
         }
     }, [state])
 
-    return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>
+    return <VideoStateContext.Provider value={value}>{children}</VideoStateContext.Provider>
 }
 
-function useVideoContext() {
-    return useContext(VideoContext)
+function VideoRefProvider({ children }): React.ReactElement {
+    const videoRef = useRef(null)
+    return <VideoRefContext.Provider value={videoRef}>{children}</VideoRefContext.Provider>
 }
 
-export { useVideoContext, Provider as default }
+function useVideoStateContext() {
+    return useContext(VideoStateContext)
+}
+
+function useVideoRefContext() {
+    return useContext(VideoRefContext)
+}
+
+export { useVideoStateContext, useVideoRefContext, VideoRefProvider, VideoStateProvider as default }

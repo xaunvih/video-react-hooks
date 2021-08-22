@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useVideoContext } from '../context/Context'
+import { useVideoStateContext } from '../context/Context'
 import Icon from './Icon'
 
 const S = {
@@ -22,7 +22,7 @@ interface IProps {
 }
 
 function BigPlayButton(props: IProps): React.ReactElement {
-    const { state } = useVideoContext()
+    const { state } = useVideoStateContext()
     const { isPlay: isHidden } = state
 
     return (

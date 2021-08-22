@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useFullscreen } from '../hooks/useFullScreen'
-import { useVideoContext } from '../context/Context'
+import { useVideoStateContext } from '../context/Context'
 import { FULL_SCREEN } from '../context/types'
 import Icon from './Icon'
 import { ActionTypes } from '../context/@types'
@@ -37,7 +37,7 @@ const FullScreen = React.memo((props: IProps) => {
 })
 
 function FullScreenWrapper(): React.ReactElement {
-    const { state, dispatch } = useVideoContext()
+    const { state, dispatch } = useVideoStateContext()
     const { isEnded } = state
     return <FullScreen isEnded={isEnded} dispatch={dispatch} />
 }

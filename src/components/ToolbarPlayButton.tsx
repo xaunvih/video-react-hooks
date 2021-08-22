@@ -1,5 +1,5 @@
 import React from 'react'
-import { useVideoContext } from '../context/Context'
+import { useVideoStateContext } from '../context/Context'
 import Icon from './Icon'
 
 interface IProps {
@@ -7,7 +7,7 @@ interface IProps {
 }
 
 function PlayButton({ onClick }: IProps): React.ReactElement {
-    const { state } = useVideoContext()
+    const { state } = useVideoStateContext()
     const { isPlaying } = state
     const icon = isPlaying ? 'pause' : 'play_arrow'
 
