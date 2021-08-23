@@ -6,7 +6,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useVideoStateContext } from '../context/Context'
 import { VOLUME_CHANGE } from '../context/types'
 import { ActionTypes } from '../context/@types'
-import Icon, { VolumeDownIcon, VolumeMuteIcon, VolumeOffIcon, VolumeUpIcon } from './Icon'
+import { VolumeDownIcon, VolumeMuteIcon, VolumeOffIcon, VolumeUpIcon } from './Icon'
 import Slider from './Slider'
 import { standartSpacingPoint } from '../styles'
 
