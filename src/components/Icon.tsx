@@ -1,6 +1,3 @@
-import React from 'react'
-import styled from 'styled-components'
-import { standartSpacingPoint, colors } from '../styles'
 import CircleInnerCircleIcon from '../icons/circle-inner-circle.svg'
 import CicleOutlineIcon from '../icons/circle-outline.svg'
 import CircleIcon from '../icons/circle.svg'
@@ -35,23 +32,7 @@ import VolumeMuteIcon from '../icons/volume-mute.svg'
 import VolumeOffIcon from '../icons/volume-off.svg'
 import VolumeUpIcon from '../icons/volume-up.svg'
 
-interface IProps {
-    name: string
-}
-
-const S = {
-    Icon: styled.span`
-        color: ${colors.white};
-        padding: ${standartSpacingPoint}px;
-    `,
-}
-
-function Icon(props: IProps): React.ReactElement {
-    return <S.Icon className="material-icons">{props.name}</S.Icon>
-}
-
 export {
-    Icon as default,
     VolumeDownIcon,
     VolumeMuteIcon,
     VolumeOffIcon,

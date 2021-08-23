@@ -1,5 +1,5 @@
 import React from 'react'
-import Icon from './Icon'
+import { InfoOutlineIcon } from './Icon'
 
 interface IProps {
     onClick: () => void
@@ -8,7 +8,7 @@ interface IProps {
 function PictureinPicture({ onClick }: IProps): React.ReactElement {
     return (
         <button onClick={onClick}>
-            <Icon name="picture_in_picture_alt" />
+            <InfoOutlineIcon />
         </button>
     )
 }

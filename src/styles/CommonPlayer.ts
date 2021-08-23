@@ -99,6 +99,12 @@ const CommonPlayer = styled.div`
     font-size: ${fontSizes.large};
     font-family: sans-serif;
     background-color: ${colors.black};
+
+    button {
+        width: 40px;
+        height: 40px;
+        padding: 8px;
+    }
 `
 
 export default CommonPlayer

@@ -6,15 +6,15 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useVideoStateContext } from '../context/Context'
 import { VOLUME_CHANGE } from '../context/types'
 import { ActionTypes } from '../context/@types'
-import Icon from './Icon'
+import Icon, { VolumeDownIcon, VolumeMuteIcon, VolumeOffIcon, VolumeUpIcon } from './Icon'
 import Slider from './Slider'
 import { standartSpacingPoint } from '../styles'
 
 const ICON = {
-    OFF: 'volume_off',
-    MUTE: 'volume_mute',
-    DOWN: 'volume_down',
-    UP: 'volume_up',
+    OFF: <VolumeOffIcon />,
+    MUTE: <VolumeMuteIcon />,
+    DOWN: <VolumeDownIcon />,
+    UP: <VolumeUpIcon />,
 }
 
 const S = {} as any
@@ -29,7 +29,7 @@ S.VolumeWraper = styled.div`
     }
 `
 
-function classifyIcon(volume: number): string {
+function classifyIcon(volume: number): React.ReactElement {
     if (volume === 0) return ICON.OFF
     if (volume <= 0.4) return ICON.MUTE
     if (volume <= 0.7) return ICON.DOWN
@@ -45,7 +45,7 @@ interface IProps {
 }
 
 const Volume = React.memo((props: IProps) => {
-    const [icon, setIcon] = useState<string>(() => classifyIcon(volume))
+    const [icon, setIcon] = useState(() => classifyIcon(volume))
     const [storedVolume, setStoredVolume] = useLocalStorage(VOLUME, DEFAULT_VOLUME)
     const [storedMuteVolume, setStoredMuteVolume] = useLocalStorage(VOLUME_MUTE, DEFAULT_VOLUME)
 
@@ -94,9 +94,7 @@ const Volume = React.memo((props: IProps) => {
 
     return (
         <S.VolumeWraper>
-            <button onClick={onClick}>
-                <Icon name={icon} />
-            </button>
+            <button onClick={onClick}>{icon}</button>
             <Slider min={0} max={100} value={volume * 100} onChange={onChange} />
         </S.VolumeWraper>
     )

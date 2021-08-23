@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useVideoStateContext } from '../context/Context'
-import Icon from './Icon'
+import { PlayCicleFilledIcon } from './Icon'
 
 const S = {
     Button: styled.button`
@@ -9,11 +9,7 @@ const S = {
         top: 50%;
         left: 50%;
         z-index: 1;
-        transform: translate(-50%, -50%);
-
-        span {
-            font-size: 80px;
-        }
+        transform: translate(-50%, -50%) scale(3.5);
     `,
 }
 
@@ -27,7 +23,7 @@ function BigPlayButton(props: IProps): React.ReactElement {
 
     return (
         <S.Button onClick={props.onClick} hidden={isHidden}>
-            <Icon name="play_circle_filled" />
+            <PlayCicleFilledIcon />
         </S.Button>
     )
 }

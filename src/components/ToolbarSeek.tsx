@@ -9,6 +9,7 @@ interface IProps {
 }
 
 const S = {} as any
+
 S.Seekbar = styled.div`
     width: 100%;
     padding: 0 ${standartSpacingPoint};
