@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { colors } from '../styles'
 
@@ -178,7 +178,7 @@ function Slider(props: IProps): React.ReactElement {
         }
     }
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (skeleton.isDragging) return
 
         const move = (props.value / (props.max - props.min)) * dimensions.width
@@ -189,7 +189,6 @@ function Slider(props: IProps): React.ReactElement {
     return (
         <S.SliderWrapper onClick={onClick} onMouseMove={onDraging} onMouseUp={onDragEnd} onTouchMove={onDraging} onTouchEnd={onDragEnd}>
             <S.SliderInner ref={updateDimensions}>
-                {/* <S.Desized move={move} /> */}
                 <S.Progess move={move} />
                 <S.Bullet move={move} onMouseDown={onDragStart} onTouchStart={onDragStart} />
             </S.SliderInner>

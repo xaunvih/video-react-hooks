@@ -1,5 +1,4 @@
 const path = require('path')
-const fs = require('fs')
 
 module.exports = {
     entry: path.join(__dirname, 'public/index.tsx'),
